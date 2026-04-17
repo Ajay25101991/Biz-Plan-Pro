@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BizPlan Pro — Financial Planning Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Figtree:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f7f5f2;--s1:#fff;--s2:#f0ede8;--s3:#e6e1da;--s4:#d9d3ca;
+  --bd:#cbc4b9;--bd2:#b3ab9e;
+  --tx:#1c1a16;--t2:#4a4640;--t3:#7a756d;--t4:#a39d94;
+  --ac:#2a5a3c;--ac2:#1d4029;--ag:rgba(42,90,60,.07);--ah:rgba(42,90,60,.14);
+  --gn:#1a7a42;--gg:rgba(26,122,66,.07);
+  --rd:#a62626;--rg:rgba(166,38,38,.07);
+  --am:#9a6c1a;--amg:rgba(154,108,26,.06);--amb:rgba(154,108,26,.22);
+  --bl:#2d5494;--blg:rgba(45,84,148,.07);
+  --r:8px;--rs:5px;
+  --hd:'Fraunces',Georgia,serif;
+  --f:'Figtree',system-ui,sans-serif;
+  --m:'Fira Code','Consolas',monospace;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.06);
+}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--bg);color:var(--tx);min-height:100vh}
+
+/* ── Layout ── */
+.app{display:grid;grid-template-columns:248px 1fr;grid-template-rows:58px 1fr;min-height:100vh}
+.top{grid-column:1/-1;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.top .logo{font-family:var(--hd);font-size:19px;font-weight:800;color:var(--ac);letter-spacing:-.5px;display:flex;align-items:center;gap:6px}
+.top .logo-icon{width:28px;height:28px;background:var(--ac);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900;font-family:var(--m);flex-shrink:0}
+.top .logo span{color:var(--am);font-style:italic;font-weight:400}
+.top .sep{width:1px;height:26px;background:var(--bd);margin:0 2px}
+.top .plan-name{font-size:12.5px;color:var(--t3);font-weight:500;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;padding:3px 6px;border-radius:4px;transition:.15s}
+.top .plan-name:hover{background:var(--s2);color:var(--tx)}
+.top .rt{margin-left:auto;display:flex;align-items:center;gap:6px}
+.btn{border:none;padding:6px 14px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--f);transition:all .15s;letter-spacing:.2px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.btn:active{transform:translateY(0);box-shadow:none}
+.btn.primary{background:var(--ac);color:#fff}.btn.amber{background:var(--am);color:#fff}
+.btn.blue{background:var(--bl);color:#fff}.btn.ghost{background:transparent;color:var(--t2);border:1.5px solid var(--bd)}
+.btn.ghost:hover{border-color:var(--ac);color:var(--ac);background:var(--ag)}
+.btn.red{background:var(--rd);color:#fff}
+.btn.sm{padding:4px 10px;font-size:11px}
+
+/* ── Sidebar ── */
+.sd{background:var(--s1);border-right:1px solid var(--bd);padding:14px 8px;overflow-y:auto;position:sticky;top:58px;height:calc(100vh - 58px)}
+.sd .gl{font-size:8.5px;text-transform:uppercase;letter-spacing:2px;color:var(--t4);padding:5px 12px;font-weight:700;margin-top:18px}
+.sd .gl:first-child{margin-top:0}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2);transition:.12s;user-select:none;border:1.5px solid transparent;margin-bottom:1px}
+.ni:hover{background:var(--s2);color:var(--tx)}
+.ni.on{background:var(--ag);color:var(--ac);font-weight:700;border-color:rgba(42,90,60,.18)}
+.ni .dt{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.ni .cnt{font-size:9.5px;color:var(--t4);margin-left:auto;font-family:var(--m);background:var(--s3);padding:1px 5px;border-radius:10px}
+.ni.on .cnt{background:rgba(42,90,60,.12);color:var(--ac)}
+
+/* ── Main ── */
+.mn{padding:28px 36px;overflow-y:auto;max-height:calc(100vh - 58px)}
+.mn h2{font-family:var(--hd);font-size:22px;font-weight:800;color:var(--ac);margin-bottom:5px;letter-spacing:-.4px}
+.mn .subtitle{font-size:12.5px;color:var(--t3);margin-bottom:22px;line-height:1.6}
+.pg-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap}
+.pg-hd-left h2{margin-bottom:4px}
+.pg-hd-left .subtitle{margin-bottom:0}
+.pg-hd-right{display:flex;gap:6px;flex-shrink:0;margin-top:4px}
+
+/* ── Cards ── */
+.cd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px 24px;margin-bottom:14px;box-shadow:var(--shadow)}
+.cd h3{font-family:var(--hd);font-size:14.5px;font-weight:700;margin-bottom:14px;color:var(--tx);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cd h3 .badge{font-family:var(--f);font-size:9px;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:10px;font-weight:700;flex-shrink:0}
+.cd.accent{border-left:4px solid var(--ac)}
+.cd.amber-l{border-left:4px solid var(--am)}
+.cd.blue-l{border-left:4px solid var(--bl)}
+.cd.red-l{border-left:4px solid var(--rd)}
+.cd.green-l{border-left:4px solid var(--gn)}
+
+/* ── Collapsible ── */
+.collapsible-hd{cursor:pointer;user-select:none}
+.collapsible-hd::after{content:' ▾';font-size:11px;color:var(--t4);transition:.2s}
+.collapsible-hd.closed::after{content:' ▸'}
+.collapsible-body{overflow:hidden;transition:max-height .25s ease}
+.collapsible-body.closed{max-height:0!important}
+
+/* ── Tables ── */
+.tw{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--bd);background:var(--s1)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--s2);color:var(--t3);font-weight:700;font-size:9.5px;letter-spacing:.8px;padding:9px 11px;text-align:right;border-bottom:1.5px solid var(--bd);position:sticky;top:0;white-space:nowrap;text-transform:uppercase;font-family:var(--f);z-index:2}
+th:first-child{text-align:left;padding-left:14px}
+td{padding:6px 11px;border-bottom:1px solid var(--s3);text-align:right;font-family:var(--m);font-size:12.5px;white-space:nowrap;color:var(--t2)}
+td:first-child{text-align:left;font-family:var(--f);font-weight:600;color:var(--tx);padding-left:14px}
+
+/* ── Freeze Panes — sticky first column ── */
+.tw th:first-child,.tw td:first-child{position:sticky;left:0;z-index:1;background:var(--s1);box-shadow:2px 0 0 var(--bd) inset,1px 0 3px rgba(0,0,0,.04)}
+.tw thead th:first-child{z-index:4;background:var(--s2)}
+.tw tr.sec td:first-child{background:var(--ac);color:#fff}
+.tw tr.tot td:first-child{background:#eaf4ed}
+.tw tr.sub td:first-child{background:var(--s1)}
+.tw tr.dim td:first-child{background:var(--s1)}
+.tw tr.warn td:first-child{background:#f8e5e5}
+.tw tr:hover td:first-child{background:#f4f1ec}
+.tw tr.tot:hover td:first-child{background:#e0ece3}
+.tw tr.sec:hover td:first-child{background:var(--ac)}
+
+td.neg{color:var(--rd)!important}
+td.pos{color:var(--gn)!important}
+tr:hover td{background:rgba(42,90,60,.025)}
+tr.sec td{background:var(--ac);color:#fff;font-weight:700;font-family:var(--f);font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:7px 11px}
+tr.sec td:first-child{padding-left:14px}
+tr.tot td{background:var(--gg);font-weight:700;border-top:2px solid var(--gn);color:var(--gn);font-family:var(--f)}
+tr.sub td{font-weight:700;border-top:1.5px solid var(--bd2);color:var(--tx)}
+tr.dim td{color:var(--t4);font-size:11.5px;font-style:italic}
+tr.warn td{background:var(--rg);color:var(--rd)}
+
+/* ── Inputs ── */
+.inp{background:var(--amg);border:1.5px solid var(--amb);color:var(--am);font-family:var(--m);font-size:12.5px;padding:5px 8px;border-radius:var(--rs);width:100px;text-align:right;outline:none;transition:.15s;font-weight:500}
+.inp:focus{border-color:var(--am);box-shadow:0 0 0 3px rgba(154,108,26,.12);background:rgba(154,108,26,.09)}
+.inp.wide{width:150px}.inp.xl{width:200px}
+.inp-txt{background:var(--s2);border:1.5px solid var(--bd);color:var(--tx);font-family:var(--f);font-size:12.5px;padding:5px 8px;border-radius:var(--rs);outline:none;transition:.15s}
+.inp-txt:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ag)}
+
+/* ── KPI Cards ── */
+.kpg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.kp{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;position:relative;border-left:4px solid var(--ac);box-shadow:var(--shadow);overflow:hidden;transition:.2s}
+.kp:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.kp .kl{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:4px;font-weight:700}
+.kp .kv{font-size:20px;font-weight:800;font-family:var(--m);color:var(--tx);line-height:1.2}
+.kp .ks{font-size:11px;color:var(--t3);margin-top:3px}
+.kp .spark{position:absolute;bottom:0;right:0;opacity:.15}
+.kp.g{border-left-color:var(--gn)}.kp.g .kv{color:var(--gn)}
+.kp.r{border-left-color:var(--rd)}.kp.r .kv{color:var(--rd)}
+.kp.a{border-left-color:var(--am)}.kp.a .kv{color:var(--am)}
+.kp.b{border-left-color:var(--bl)}.kp.b .kv{color:var(--bl)}
+
+/* ── Banners ── */
+.ban{padding:14px 22px;border-radius:var(--r);font-weight:700;font-size:15px;text-align:center;margin-bottom:16px;font-family:var(--hd);display:flex;align-items:center;justify-content:center;gap:10px}
+.ban.go{background:var(--gg);border:1.5px solid var(--gn);color:var(--gn)}
+.ban.no{background:var(--rg);border:1.5px solid var(--rd);color:var(--rd)}
+.ban.wt{background:var(--amg);border:1.5px solid var(--am);color:var(--am)}
+
+/* ── Store Selector ── */
+.store-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:14px}
+.st{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:var(--s1);color:var(--t2);transition:.15s}
+.st:hover{border-color:var(--ac);color:var(--ac);background:var(--ag)}
+.st.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.st .x{margin-left:3px;opacity:.6;cursor:pointer;font-size:13px;line-height:1}.st .x:hover{opacity:1}
+
+/* ── Form Grid ── */
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px}
+.fi{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:4px;transition:.1s}
+.fi:hover{background:var(--s2)}
+.fi label{font-size:12.5px;color:var(--t2);font-weight:500;display:flex;align-items:center;gap:5px}
+.fi .tip{font-size:10px;color:var(--t4);cursor:help;border-bottom:1px dashed var(--t4)}
+
+/* ── KPI Row ── */
+.kpi-row{display:flex;gap:20px;padding:12px 16px;background:var(--ag);border-radius:var(--rs);margin-top:10px;flex-wrap:wrap;border:1px solid rgba(42,90,60,.1)}
+.kpi-item{display:flex;flex-direction:column;min-width:100px}
+.kpi-item .kpi-label{font-size:8.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ac);font-weight:700;margin-bottom:2px}
+.kpi-item .kpi-val{font-size:17px;font-weight:800;font-family:var(--m);color:var(--ac)}
+.kpi-item .kpi-sub{font-size:10px;color:var(--t3);margin-top:1px}
+
+/* ── Saved Plans ── */
+.sv-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:7px;background:var(--s1);transition:.15s;box-shadow:var(--shadow)}
+.sv-item:hover{border-color:var(--ac);background:var(--ag);box-shadow:var(--shadow-md)}
+.sv-name{font-weight:700;font-size:13.5px;flex:1;font-family:var(--hd)}
+.sv-meta{font-size:10.5px;color:var(--t3)}
+.sv-kpi{font-size:10.5px;font-family:var(--m);color:var(--ac);font-weight:700;background:var(--ag);padding:2px 7px;border-radius:10px}
+
+/* ── Charts ── */
+.chart-wrap{width:100%;overflow-x:auto;margin-top:4px}
+canvas.chart{display:block;max-width:100%}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.chart-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+.chart-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-msg{background:#1c1a16;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--f);box-shadow:0 4px 20px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px;animation:toastIn .2s ease;pointer-events:auto}
+.toast-msg.success{border-left:4px solid var(--gn)}
+.toast-msg.error{border-left:4px solid var(--rd)}
+.toast-msg.info{border-left:4px solid var(--bl)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── Progress bar for saves ── */
+.prog-bar{height:4px;border-radius:2px;background:var(--s3);overflow:hidden;margin-top:6px}
+.prog-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gn),var(--ac));transition:width .4s ease}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:0;border-bottom:1.5px solid var(--bd);margin-bottom:16px}
+.tab{padding:8px 16px;font-size:12.5px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:.15s}
+.tab:hover{color:var(--tx)}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac)}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:58px auto 1fr}
+  .sd{grid-row:2;position:static;height:auto;display:flex;overflow-x:auto;padding:6px;gap:3px;border-right:none;border-bottom:1px solid var(--bd)}
+  .sd .gl{display:none}.ni{white-space:nowrap;padding:5px 9px;font-size:11.5px}
+  .mn{padding:14px}
+  .kpg{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){.kpg{grid-template-columns:1fr}}
+</style>
+<!-- BizPlan Pro SharePoint Integration: MSAL authentication library -->
+<script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js" crossorigin="anonymous"></script>
+</head><body>
+
+<div id="toast"></div>
+<div class="app">
+<div class="top">
+  <div class="logo">
+    <div class="logo-icon">₿</div>
+    BizPlan <span>Pro</span>
+  </div>
+  <div class="sep"></div>
+  <div class="plan-name" id="pname" onclick="renamePlan()" title="Click to rename">New Business Plan ✎</div>
+  <div class="rt">
+    <button class="btn ghost sm" onclick="go('saves')" title="Saved plans">📁 Plans</button>
+    <button class="btn amber sm" onclick="savePlan()">💾 Save</button>
+    <button class="btn primary sm" id="bx" onclick="xExcel()">⬇ Excel</button>
+    <button class="btn blue sm" id="bp" onclick="xPDF()">⬇ PDF</button>
+    <button class="btn ghost sm" id="sp-sync-btn" onclick="syncToSharePoint()" title="Sync all data to SharePoint Excel">☁ SharePoint</button>
+  </div>
+</div>
+<div class="sd" id="sd"></div>
+<div class="mn" id="mn"></div>
+</div>
+
+<script>
+
+// ════════════════════════════════════════════════════
+// SHAREPOINT GRAPH API INTEGRATION
+// ════════════════════════════════════════════════════
+//
+// HOW TO FILL IN THESE VALUES (one-time setup):
+//
+//  clientId  → Azure Portal → Azure Active Directory
+//               → App Registrations → [Your App]
+//               → Overview → "Application (client) ID"
+//
+//  tenantId  → Same page → "Directory (tenant) ID"
+//
+//  siteId    → Open browser, sign in to Microsoft 365, then call:
+//               GET https://graph.microsoft.com/v1.0/sites/{hostname}:/{site-path}
+//               e.g. https://graph.microsoft.com/v1.0/sites/yourcompany.sharepoint.com:/sites/BizPlan
+//               Copy the "id" field from the JSON response.
+//
+//  driveId   → GET https://graph.microsoft.com/v1.0/sites/{siteId}/drives
+//               Find the "Documents" library → copy its "id" field.
+//
+//  fileId    → GET https://graph.microsoft.com/v1.0/sites/{siteId}/drives/{driveId}/root/children
+//               Find "BizPlan_Pro_v3_Complete.xlsx" → copy its "id" field.
+//
+//  Use https://developer.microsoft.com/en-us/graph/graph-explorer to make
+//  the above calls interactively without writing any code.
+// ════════════════════════════════════════════════════
+
+var GRAPH_CONFIG = {
+  clientId : 'YOUR_AZURE_APP_CLIENT_ID',       // ← Replace before using
+  tenantId : 'YOUR_AZURE_TENANT_ID',            // ← Replace before using
+  siteId   : 'YOUR_SHAREPOINT_SITE_ID',         // ← Replace before using
+  driveId  : 'YOUR_SHAREPOINT_DRIVE_ID',        // ← Replace before using
+  fileId   : 'YOUR_XLSX_FILE_ID'                // ← Replace before using
+};
+
+// ── Cell/range map for BizPlan_Pro_v3_Complete.xlsx ──────────────────────
+// These match the exact sheet structure built in build_v3.py.
+// If you regenerate the XLSX, verify these row numbers still match.
+var XLSX_MAP = {
+  CONFIG: {
+    planName : 'C5',           // S.name
+    staffEsc : 'C14:L14',     // S.staffEsc[0..9]
+    opexEsc  : 'C15:L15',     // S.opexEsc[0..9]
+    rentEsc  : 'C16:L16',     // S.rentEsc[0..9]
+    mktgPct  : 'C17:L17',     // S.mktgPct[0..9]
+    taxRate  : 'C18:L18',     // S.taxRate[0..9]
+    useful   : 'C19:L19',     // S.usefulLife[0..9]
+    wacc     : 'C20:L20'      // S.wacc[0..9]
+  },
+  // M_Channels row per HTML channel key (data starts at row 5)
+  CH_ROW : { ebo:5, others:6, ecom:7, sis:9, mono:12 },
+  // M_WorkingCapital: each channel occupies 10 rows; cols E:G = invDays/debDays/credDays
+  WC_START : { CH01:5, CH02:15, CH03:25, CH04:35, CH05:45, CH06:55, CH07:65, CH08:75 },
+  WC_CH    : { ebo:'CH01', others:'CH02', ecom:'CH03', sis:'CH05', mono:'CH08' },
+  // M_CentralCosts: corpOH rows (data rows 6-10, cols C:L = Yr1-Yr10)
+  OH_ROW   : { ebo:6, sis:7, ecom:8, others:9, mono:10 },
+  // M_InventoryModel: global param values in col C, rows 6-12
+  INV_GLOB : { spy:6, life:7, deval:8, cov:9, moq:10, ss0:11, ss1:12 },
+  // Per-channel inventory: 7 channel rows starting at row 17 (sellThru) and row 27 (discBySeason)
+  INV_ST   : 17,   // sellThru data start row
+  INV_DS   : 27    // discountBySeason data start row
+  // Channel order in those blocks: ebo, others, ecom, ecom, sis, mono, mono
+};
+
+// ── MSAL instance ─────────────────────────────────────────────────────────
+var _msalApp = null;
+
+function initMSAL(){
+  if(typeof msal==='undefined') return null;
+  if(_msalApp) return _msalApp;
+  try{
+    _msalApp=new msal.PublicClientApplication({
+      auth:{
+        clientId : GRAPH_CONFIG.clientId,
+        authority: 'https://login.microsoftonline.com/'+GRAPH_CONFIG.tenantId,
+        redirectUri: window.location.href.split('?')[0]
+      },
+      cache:{ cacheLocation:'sessionStorage', storeAuthStateInCookie:false }
+    });
+  }catch(e){ console.warn('MSAL init error:',e.message); }
+  return _msalApp;
+}
+
+async function getGraphToken(){
+  var app=initMSAL();
+  if(!app){ toast('MSAL not loaded — check internet connection','error'); return null; }
+  var scopes=['Files.ReadWrite','Sites.ReadWrite.All'];
+  try{
+    var accs=app.getAllAccounts();
+    if(accs.length){
+      try{ var r=await app.acquireTokenSilent({scopes:scopes,account:accs[0]}); return r.accessToken; }
+      catch(e2){ /* fall through to popup */ }
+    }
+    var r=await app.loginPopup({scopes:scopes});
+    return r.accessToken;
+  }catch(e){
+    toast('Sign-in failed: '+e.message,'error'); return null;
+  }
+}
+
+async function patchRange(token,sheet,range,values){
+  var url='https://graph.microsoft.com/v1.0'
+    +'/sites/'+GRAPH_CONFIG.siteId
+    +'/drives/'+GRAPH_CONFIG.driveId
+    +'/items/'+GRAPH_CONFIG.fileId
+    +'/workbook/worksheets/'+encodeURIComponent(sheet)
+    +'/range(address=\''+range+'\')';
+  var res=await fetch(url,{
+    method:'PATCH',
+    headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+    body:JSON.stringify({values:values})
+  });
+  if(!res.ok){
+    var err=await res.json().catch(function(){return {};});
+    throw new Error(sheet+'!'+range+': '+(err.error&&err.error.message?err.error.message:res.status));
+  }
+}
+
+function pad10(arr,def){
+  // Ensure array has exactly 10 numeric elements
+  var a=(arr||[]).slice(0,10).map(function(v){return+(v||def||0);});
+  while(a.length<10) a.push(def||0);
+  return a;
+}
+
+// ── Main sync ─────────────────────────────────────────────────────────────
+async function syncToSharePoint(){
+  if(GRAPH_CONFIG.clientId==='YOUR_AZURE_APP_CLIENT_ID'){
+    toast('SharePoint sync skipped — fill GRAPH_CONFIG values in the HTML file first','info');
+    return;
+  }
+  var btn=document.getElementById('sp-sync-btn');
+  if(btn){btn.textContent='☁ Syncing…';btn.disabled=true;}
+  toast('Connecting to SharePoint…','info');
+
+  try{
+    var token=await getGraphToken();
+    if(!token){if(btn){btn.textContent='☁ SharePoint';btn.disabled=false;}return;}
+
+    // ── 1. Config: plan name + all 10-year global arrays ──────────────────
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.planName,[[S.name]]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.staffEsc,[pad10(S.staffEsc,.07)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.opexEsc, [pad10(S.opexEsc,.05)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.rentEsc, [pad10(S.rentEsc,0)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.mktgPct, [pad10(S.mktgPct,.02)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.taxRate,  [pad10(S.taxRate,.2517)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.useful,   [pad10(S.usefulLife,9)]);
+    await patchRange(token,'Config',XLSX_MAP.CONFIG.wacc,     [pad10(S.wacc,.12)]);
+
+    // ── 2. M_Channels: COGS params cols F:O (disc,partnerM,gst,fob,royalty,
+    //                  duty,salesRoy,deval,shrink,scm) ─────────────────────
+    var chWrites=[];
+    CK.forEach(function(k){
+      var cs=S.cs[k]||{}, row=XLSX_MAP.CH_ROW[k]; if(!row) return;
+      chWrites.push(patchRange(token,'M_Channels','F'+row+':O'+row,[[
+        +(cs.disc||0),+(cs.partnerM||0),+(cs.gst||0),+(cs.fob||0),+(cs.royalty||0),
+        +(cs.duty||0),+(cs.salesRoy||0),+(cs.deval||0),+(cs.shrink||0),+(cs.scm||0)
+      ]]));
+    });
+    await Promise.all(chWrites);
+
+    // ── 3. M_WorkingCapital: invDays/debDays/credDays cols E:G ────────────
+    var wcWrites=[];
+    CK.forEach(function(k){
+      var wc=S.wc[k]||{}, chid=XLSX_MAP.WC_CH[k], start=XLSX_MAP.WC_START[chid];
+      if(!start) return;
+      var rows=[];
+      for(var y=0;y<10;y++) rows.push([
+        +(wc.invDays&&wc.invDays[y]!=null?wc.invDays[y]:180),
+        +(wc.debDays&&wc.debDays[y]!=null?wc.debDays[y]:3),
+        +(wc.credDays&&wc.credDays[y]!=null?wc.credDays[y]:30)
+      ]);
+      wcWrites.push(patchRange(token,'M_WorkingCapital','E'+start+':G'+(start+9),rows));
+    });
+    await Promise.all(wcWrites);
+
+    // ── 4. M_CentralCosts: corpOH per channel cols C:L ────────────────────
+    var ohWrites=[];
+    CK.forEach(function(k){
+      var row=XLSX_MAP.OH_ROW[k]; if(!row) return;
+      ohWrites.push(patchRange(token,'M_CentralCosts','C'+row+':L'+row,[pad10(S.corpOH[k],0)]));
+    });
+    await Promise.all(ohWrites);
+
+    // ── 5. M_InventoryModel: global params col C rows 6-12 ────────────────
+    var inv=S.inv||{};
+    var ig=XLSX_MAP.INV_GLOB;
+    var spl=inv.seasonSplit||[.5,.5];
+    await Promise.all([
+      patchRange(token,'M_InventoryModel','C'+ig.spy,  [[+(inv.seasonsPerYear||2)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.life, [[+(inv.seasonLife||5)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.deval,[[+(inv.devalRate||.70)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.cov,  [[+(inv.coverRatio||1.15)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.moq,  [[+(inv.minBuyPerSeason||2)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.ss0,  [[+(spl[0]||.5)]]),
+      patchRange(token,'M_InventoryModel','C'+ig.ss1,  [[+(spl[1]||.5)]])
+    ]);
+
+    // ── 6. M_InventoryModel: per-channel sellThru + discountBySeason ──────
+    // Channel order in XLSX blocks: ebo, others, ecom, ecom, sis, mono, mono
+    var invChKeys=['ebo','others','ecom','ecom','sis','mono','mono'];
+    var invWrites=[];
+    invChKeys.forEach(function(k,idx){
+      var ch=(inv.chSettings&&inv.chSettings[k])||{};
+      var stRow=XLSX_MAP.INV_ST+idx;
+      var dsRow=XLSX_MAP.INV_DS+idx;
+      var st=(ch.sellThru||[.5,.22,.12,.08,.05]).slice(0,5);
+      while(st.length<5) st.push(0);
+      invWrites.push(patchRange(token,'M_InventoryModel','C'+stRow+':L'+stRow,[[
+        +st[0],+st[1],+st[2],+st[3],+st[4],
+        +(ch.rtvReturnPct||.10),+(ch.rtvSwapPct||0),+(ch.rtvFreightRate||.02),
+        +(ch.minStoreStockDays||30),+(ch.safetyWarehouseDays||45)
+      ]]));
+      var ds=(ch.discountBySeason||[]).slice(0,20).map(Number);
+      while(ds.length<20) ds.push(ds.length?ds[ds.length-1]:.15);
+      invWrites.push(patchRange(token,'M_InventoryModel','C'+dsRow+':V'+dsRow,[ds]));
+    });
+    await Promise.all(invWrites);
+
+    // ── 7. M_Stores: revenue & opex inputs per store (cols I, L:W) ────────
+    // ── 8. M_StoreAnnual: year-wise arrays (cols F:M) ─────────────────────
+    // ── 9. M_StoreStaff: staff roles (cols D:F) ───────────────────────────
+    var storeRow=5, annualRow=5, staffRow=5;
+    var storeWrites=[];
+    CK.forEach(function(k){
+      (S.stores[k]||[]).forEach(function(st){
+        // M_Stores: area(I), then footfall…otherExp (L:W)
+        storeWrites.push(patchRange(token,'M_Stores','I'+storeRow,[[+(st.area||0)]]));
+        storeWrites.push(patchRange(token,'M_Stores','L'+storeRow+':W'+storeRow,[[
+          +(st.footfall||0),+(st.conv||0),+(st.atv||0),
+          +(st.cpxPsf||0),+(st.mgRate||0),+(st.camRate||0),
+          +(st.utilities||0),+(st.rm||0),+(st.hk||0),
+          +(st.security||0),+(st.comm||0),+(st.otherExp||0)
+        ]]));
+        // M_StoreAnnual: 10 rows per store (cols F:M)
+        var arows=[];
+        for(var y=0;y<10;y++) arows.push([
+          +(Array.isArray(st.lfl)?st.lfl[y]||0:0),
+          +(Array.isArray(st.opM)?st.opM[y]||12:12),
+          +(Array.isArray(st.depMonths)?st.depMonths[y]||0:0),
+          +(Array.isArray(st.revSharePct)?st.revSharePct[y]||.15:.15),
+          +(Array.isArray(st.consPct)?st.consPct[y]||.01:.01),
+          +(Array.isArray(st.bankChgPct)?st.bankChgPct[y]||.01:.01),
+          +(Array.isArray(st.renCpxPsf)?st.renCpxPsf[y]||0:0),
+          st.staffEscLocal&&Array.isArray(st.staffEscLocal)?(st.staffEscLocal[y]||null):null
+        ]);
+        storeWrites.push(patchRange(token,'M_StoreAnnual','F'+annualRow+':M'+(annualRow+9),arows));
+        // M_StoreStaff: title, count, ctcLakhs (cols D:F)
+        (st.staff||[]).forEach(function(sr){
+          storeWrites.push(patchRange(token,'M_StoreStaff','D'+staffRow+':F'+staffRow,[[
+            sr.title||'',+(sr.count||0),+(sr.ctcLakhs||0)
+          ]]));
+          staffRow++;
+        });
+        storeRow++; annualRow+=10;
+      });
+    });
+    await Promise.all(storeWrites);
+
+    // ── 10. Transaction sheets: write calc() results ───────────────────────
+    var c=calc(), T=c.T, CF=c.CF;
+    var today=new Date().toLocaleDateString('en-IN');
+    var txnWrites=[];
+
+    // T_Revenue: one row per channel per year (cols A:N, 14 columns)
+    // A=TxnID B=Date C=StoreID D=StoreName[auto] E=ChannelID F=ChannelName[auto]
+    // G=CategoryID H=CategoryName[auto] I=GrossRevenue J=Discount_Pct K=Returns
+    // L=NSV[auto] M=COGS[auto] N=GM[auto]
+    var storeIdMap={ebo:'ST01',sis:'ST05',ecom:'ST08',others:'ST05',mono:'ST08'};
+    var chIdMap   ={ebo:'CH01',sis:'CH05',ecom:'CH03',others:'CH02',mono:'CH08'};
+    var revRows=[];
+    CK.forEach(function(k){
+      for(var y=0;y<10;y++){
+        revRows.push([
+          'REV-'+k.toUpperCase()+'-Yr'+(y+1),
+          today,
+          storeIdMap[k]||'',
+          '',
+          chIdMap[k]||'',
+          '',
+          'CAT01','',
+          +((c.R[k].rv[y]||0)).toFixed(4),
+          0,
+          0,
+          '',
+          '',
+          ''
+        ]);
+      }
+    });
+    if(revRows.length)
+      txnWrites.push(patchRange(token,'T_Revenue','A5:N'+(4+revRows.length),revRows));
+
+    // T_Expenses: rent,staff,utilities,opex,marketing,corpOH per channel per year
+    // A=TxnID B=Date C=StoreID D=StoreName[auto] E=ChannelID F=ChannelName[auto]
+    // G=CostTypeID H=CostTypeName[auto] I=GLCode[auto] J=Amount_Cr K=TaxDed[auto] L=Remarks
+    var expDefs=[
+      ['Rent',  'CT01',function(k,y){return c.R[k].rn[y]||0;}],
+      ['Staff', 'CT02',function(k,y){return c.R[k].sf[y]||0;}],
+      ['Util',  'CT04',function(k,y){return c.R[k].ut[y]||0;}],
+      ['Opex',  'CT13',function(k,y){return c.R[k].ox[y]||0;}],
+      ['Mktg',  'CT06',function(k,y){return c.R[k].mk[y]||0;}],
+      ['CorpOH','CT12',function(k,y){return c.R[k].co[y]||0;}]
+    ];
+    var expRows=[];
+    CK.forEach(function(k){
+      expDefs.forEach(function(ed){
+        for(var y=0;y<10;y++){
+          expRows.push([
+            'EXP-'+ed[1]+'-'+k.toUpperCase()+'-Yr'+(y+1),
+            today,
+            storeIdMap[k]||'','',
+            chIdMap[k]||'','',
+            ed[1],'','',
+            +ed[2](k,y).toFixed(4),
+            '',
+            ed[0]+' '+k+' Yr'+(y+1)
+          ]);
+        }
+      });
+    });
+    if(expRows.length)
+      txnWrites.push(patchRange(token,'T_Expenses','A5:L'+(4+expRows.length),expRows));
+
+    // T_Capex: initial capex + renovation capex per store
+    // A=TxnID B=Date C=StoreID D=StoreName[auto] E=CostTypeID F=CostTypeName[auto]
+    // G=VendorID H=VendorName[auto] I=AssetDesc J=Amount_Cr K=UsefulLife L=DepRate M=AnnualDep[auto] N=InvoiceRef
+    var capRows=[];
+    CK.forEach(function(k){
+      (S.stores[k]||[]).forEach(function(st,si){
+        var sid=storeIdMap[k]||'ST01';
+        var initCpx=(st.cpxPsf||0)*(st.area||0)/10000000;
+        if(initCpx>0) capRows.push([
+          'CAP-'+k.toUpperCase()+'-'+si+'-INIT',today,sid,'','CT14','','VEN06','',
+          (st.name||'Store')+' – Initial Fit-out',+initCpx.toFixed(4),10,.10,'',''
+        ]);
+        (st.renCpxPsf||[]).forEach(function(psf,y){
+          if(!psf) return;
+          var ren=psf*(st.area||0)/10000000;
+          capRows.push([
+            'CAP-'+k.toUpperCase()+'-'+si+'-REN-Yr'+(y+1),today,sid,'','CT14','','VEN06','',
+            (st.name||'Store')+' – Renovation Yr'+(y+1),+ren.toFixed(4),5,.20,'',''
+          ]);
+        });
+      });
+    });
+    if(capRows.length)
+      txnWrites.push(patchRange(token,'T_Capex','A5:N'+(4+capRows.length),capRows));
+
+    // T_Payroll: staff roles per store (monthly equivalent of annual CTC)
+    // A=TxnID B=PayMonth C=StoreID D=StoreName[auto] E=EmployeeID F=EmpName[auto]
+    // G=Role[auto] H=Basic I=Allowances J=Deductions K=NetPay[auto] L=PayslipRef
+    var payRows=[];
+    var mo=new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'});
+    var stIdx=0;
+    CK.forEach(function(k){
+      (S.stores[k]||[]).forEach(function(st,si){
+        var sid=storeIdMap[k]||'ST01';
+        (st.staff||[]).forEach(function(sr,ri){
+          if(!(sr.count>0)) return;
+          var monthly=(sr.ctcLakhs||0)*100000/12;
+          payRows.push([
+            'PAY-'+k.toUpperCase()+'-'+si+'-'+ri,mo,sid,'',
+            '','',sr.title||'',
+            +Math.round(monthly*.60),+Math.round(monthly*.20),
+            +Math.round(monthly*.10),'',''
+          ]);
+        });
+        stIdx++;
+      });
+    });
+    if(payRows.length)
+      txnWrites.push(patchRange(token,'T_Payroll','A5:L'+(4+payRows.length),payRows));
+
+    // T_Rent: base rent + cam per store per year
+    // A=TxnID B=RentMonth C=StoreID D=StoreName[auto] E=LandlordCode
+    // F=BaseRent_Cr G=Maintenance_Cr H=TotalOcc[auto] I=Escalation_Pct J=Revised[auto] K=LeaseExpiry L=Remarks
+    var rentRows=[];
+    CK.forEach(function(k){
+      (S.stores[k]||[]).forEach(function(st,si){
+        if(!(st.mgRate||st.area)) return;
+        var sid=storeIdMap[k]||'ST01';
+        var baseRent=+(((st.mgRate||0)*(st.area||0)*12/10000000)/12).toFixed(4);
+        var cam=+(((st.camRate||0)*(st.area||0)*12/10000000)/12).toFixed(4);
+        var esc=+(S.rentEsc&&S.rentEsc[3]!=null?S.rentEsc[3]:.15);
+        rentRows.push([
+          'RNT-'+k.toUpperCase()+'-'+si,mo,sid,'',
+          'LL'+String(si+1).padStart(3,'0'),
+          baseRent,cam,'',esc,'','',
+          (st.name||'Store')+' rent'
+        ]);
+      });
+    });
+    if(rentRows.length)
+      txnWrites.push(patchRange(token,'T_Rent','A5:L'+(4+rentRows.length),rentRows));
+
+    await Promise.all(txnWrites);
+
+    // ── Done ──────────────────────────────────────────────────────────────
+    var ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    toast('✓ Synced to SharePoint at '+ts,'success');
+    if(btn){btn.textContent='☁ Synced ✓';btn.disabled=false;}
+    setTimeout(function(){if(btn)btn.textContent='☁ SharePoint';},4000);
+
+  }catch(err){
+    console.error('SharePoint sync error:',err);
+    toast('Sync failed: '+err.message,'error');
+    if(btn){btn.textContent='☁ Sync Failed';btn.disabled=false;}
+    setTimeout(function(){if(btn)btn.textContent='☁ SharePoint';},5000);
+  }
+}
+
+// ════════════════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════════════════
+var CK=['ebo','sis','ecom','others','mono'];
+var CN={ebo:'EBO',sis:'SIS',ecom:'Ecom Marketplace',others:'Others (TWC)',mono:'Monobrand'};
+var CI={ebo:'🏪',sis:'🏬',ecom:'🛒',others:'📦',mono:'🏷️'};
+var CL={ebo:'#2a5a3c',sis:'#a62626',ecom:'#1a7a42',others:'#9a6c1a',mono:'#2d5494'};
+var NY=10; var UNIT=1e7; var DPM=30.417;
+var YR=[]; for(var _i=0;_i<NY;_i++) YR.push('Yr'+(_i+1));
+
+// ════════════════════════════════════════════════════
+// FORMATTING
+// ════════════════════════════════════════════════════
+function fCr(v){
+  if(v==null||isNaN(v)||Math.abs(v)<0.0001) return '—';
+  var neg=v<0, a=Math.abs(v), s=a.toFixed(2).split('.'), ip=s[0], dp=s[1];
+  if(ip.length>3){var l3=ip.slice(-3),rest=ip.slice(0,-3),g='';
+    while(rest.length>2){g=','+rest.slice(-2)+g;rest=rest.slice(0,-2);}
+    ip=rest+g+','+l3;}
+  var r='₹'+ip+'.'+dp; return neg?'('+r+')':r;
+}
+function fRs(v){if(!v||isNaN(v))return '—'; var a=Math.round(Math.abs(v)); return '₹'+a.toLocaleString('en-IN');}
+function fp(v){if(v==null||isNaN(v))return '—'; return(v*100).toFixed(1)+'%';}
+function fNum(v){if(!v||isNaN(v))return '—'; return v.toLocaleString('en-IN');}
+
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
+function make10(v){return[v,v,v,v,v,v,v,v,v,v];}
+function zeros(){return make10(0);}
+
+var S={
+  name:'New Business Plan',
+  cs:{}, stores:{},
+  corpOH:{ebo:make10(.07),sis:make10(.065),ecom:make10(.05),others:make10(.06),mono:make10(.05)},
+  staffEsc:make10(.07), opexEsc:make10(.05),
+  rentEsc:[0,0,0,.15,0,0,.15,0,0,.15],
+  mktgPct:make10(.02), taxRate:make10(.2517),
+  usefulLife:make10(9), wc:{}, wacc:make10(.12)
+};
+CK.forEach(function(k){
+  S.cs[k]={disc:0,partnerM:0,gst:0,fob:0,royalty:0,duty:0,salesRoy:0,deval:0,shrink:0,scm:0};
+  S.stores[k]=[];
+  S.wc[k]={invDays:make10(180),debDays:make10(3),credDays:make10(30)};
+});
+S.wc.sis.debDays=make10(45); S.wc.ecom.debDays=make10(30); S.wc.ecom.invDays=make10(90);
+S.wc.others.debDays=make10(45); S.wc.mono.debDays=make10(15); S.wc.mono.invDays=make10(120);
+
+// ════════════════════════════════════════════════════
+// INVENTORY MODEL STATE
+// ════════════════════════════════════════════════════
+S.inv={
+  seasonsPerYear:2,       // 2 (SS, AW) or 4 (quarters)
+  seasonLife:5,           // seasons before terminal devaluation
+  devalRate:0.70,         // fixed global write-down on terminal stock (doesn't vary YoY)
+  coverRatio:1.15,        // buy 15% above cumulative sell-thru need
+  minBuyPerSeason:2,      // ₹ Cr MOQ floor per channel per season
+  seasonSplit:[0.50,0.50],// share of annual NSV per season (SS, AW)
+  // Per-channel parameters
+  chSettings:{}
+};
+// Offline vs Online classification (for split summary)
+S.inv.channelType={ebo:'offline',sis:'offline',ecom:'online',others:'offline',mono:'offline'};
+// Default per-channel settings (sell-through = % of ORIGINAL buy per season of age)
+CK.forEach(function(k){
+  S.inv.chSettings[k]={
+    sellThru:[0.50,0.22,0.12,0.08,0.05], // Age 0..4
+    discountBySeason:[], // 20 values (NS) — populated below
+    rtvReturnPct:0.10,
+    rtvSwapPct:0,
+    rtvFreightRate:0.02,
+    minStoreStockDays:30,    // days of sales held at store (0 for online-only)
+    safetyWarehouseDays:45   // days of sales held at central warehouse
+  };
+  // Initialize with default flat discount (will be overridden channel-by-channel below)
+  for(var _si=0;_si<20;_si++) S.inv.chSettings[k].discountBySeason.push(0.15);
+});
+// Channel-specific tuning for realism
+S.inv.chSettings.ebo.sellThru   =[0.55,0.22,0.12,0.06,0.03];
+S.inv.chSettings.ebo.discountBySeason=[];for(var _i=0;_i<20;_i++)S.inv.chSettings.ebo.discountBySeason.push(0.10);
+S.inv.chSettings.ebo.minStoreStockDays=30; S.inv.chSettings.ebo.safetyWarehouseDays=45;
+
+S.inv.chSettings.sis.sellThru   =[0.50,0.22,0.12,0.08,0.05];
+S.inv.chSettings.sis.discountBySeason=[];for(var _i=0;_i<20;_i++)S.inv.chSettings.sis.discountBySeason.push(0.08);
+S.inv.chSettings.sis.minStoreStockDays=20; S.inv.chSettings.sis.safetyWarehouseDays=30;
+
+S.inv.chSettings.ecom.sellThru  =[0.40,0.25,0.15,0.10,0.05];
+S.inv.chSettings.ecom.discountBySeason=[];for(var _i=0;_i<20;_i++)S.inv.chSettings.ecom.discountBySeason.push(0.18);
+S.inv.chSettings.ecom.rtvReturnPct=0.15;
+S.inv.chSettings.ecom.minStoreStockDays=0; S.inv.chSettings.ecom.safetyWarehouseDays=60; // no store, bigger warehouse
+
+S.inv.chSettings.others.sellThru=[0.35,0.25,0.18,0.12,0.07];
+S.inv.chSettings.others.discountBySeason=[];for(var _i=0;_i<20;_i++)S.inv.chSettings.others.discountBySeason.push(0.20);
+S.inv.chSettings.others.minStoreStockDays=15; S.inv.chSettings.others.safetyWarehouseDays=30;
+
+S.inv.chSettings.mono.sellThru  =[0.48,0.22,0.13,0.08,0.04];
+S.inv.chSettings.mono.discountBySeason=[];for(var _i=0;_i<20;_i++)S.inv.chSettings.mono.discountBySeason.push(0.12);
+S.inv.chSettings.mono.minStoreStockDays=45; S.inv.chSettings.mono.safetyWarehouseDays=60;
+
+function newStore(nm){
+  return{
+    name:nm||'Store', area:0,
+    opM:[12,12,12,12,12,12,12,12,12,12],
+    cpxPsf:0, renCpxPsf:zeros(),
+    depMonths:[6,0,0,0,0,0,0,0,0,0],
+    footfall:0, conv:0, atv:0,
+    lfl:[0,.15,.14,.13,.08,.07,.06,.05,.05,.05],
+    staff:[
+      {title:'Store Manager',count:1,ctcLakhs:15},
+      {title:'Asst Store Manager',count:1,ctcLakhs:7.5},
+      {title:'Fashion Consultants',count:4,ctcLakhs:6},
+      {title:'Stock & Inventory',count:3,ctcLakhs:3},
+      {title:'Other',count:0,ctcLakhs:0}
+    ],
+    staffEscLocal:null,
+    mgRate:0, revSharePct:make10(.15), camRate:0,
+    utilities:60, rm:10, hk:12, security:15, comm:2, otherExp:50,
+    consPct:make10(.01), bankChgPct:make10(.01),
+    mktgPctLocal:null
+  };
+}
+
+// ════════════════════════════════════════════════════
+// WEIGHTED DISCOUNT HELPERS
+// ════════════════════════════════════════════════════
+// Weighted avg discount for channel k in year y (weighted by seasonSplit)
+function wtdDiscYear(k,y){
+  var ch=S.inv.chSettings[k];
+  var spy=S.inv.seasonsPerYear;
+  if(!ch||!ch.discountBySeason) return 0;
+  var wd=0;
+  for(var s=0;s<spy;s++){
+    var idx=y*spy+s;
+    var discVal=ch.discountBySeason[idx]!=null?ch.discountBySeason[idx]:0;
+    wd+=discVal*(S.inv.seasonSplit[s]||(1/spy));
+  }
+  return wd;
+}
+// Weighted avg discount across all channels for given season (weighted by channel gross revenue)
+function wtdDiscSeasonAll(seasonIdx,R){
+  var spy=S.inv.seasonsPerYear;
+  var y=Math.floor(seasonIdx/spy), s=seasonIdx%spy;
+  var totalRv=0, wtd=0;
+  CK.forEach(function(k){
+    var ch=S.inv.chSettings[k];
+    if(!ch||!ch.discountBySeason) return;
+    var rvSeason=(R[k].rv[y]||0)*(S.inv.seasonSplit[s]||(1/spy));
+    totalRv+=rvSeason;
+    var discVal=ch.discountBySeason[seasonIdx]!=null?ch.discountBySeason[seasonIdx]:0;
+    wtd+=discVal*rvSeason;
+  });
+  return totalRv>0?wtd/totalRv:0;
+}
+// Weighted avg discount across all channels for given year (weighted by annual rv)
+function wtdDiscYearAll(y,R){
+  var totalRv=0, wtd=0;
+  CK.forEach(function(k){
+    var rv=R[k].rv[y]||0;
+    totalRv+=rv;
+    wtd+=wtdDiscYear(k,y)*rv;
+  });
+  return totalRv>0?wtd/totalRv:0;
+}
+
+
+// ════════════════════════════════════════════════════
+// CALCULATION ENGINE
+// ════════════════════════════════════════════════════
+function calc(){
+  var R={};
+  CK.forEach(function(k){
+    var stores=S.stores[k], cs=S.cs[k];
+    var ch={rv:zeros(),disc:zeros(),gsv:zeros(),nv:zeros(),cg:zeros(),gm:zeros(),rn:zeros(),sf:zeros(),
+            ut:zeros(),ox:zeros(),mk:zeros(),co:zeros(),eb:zeros(),
+            dep:zeros(),ebit:zeros(),cx:zeros(),sd:zeros(),
+            oxRm:zeros(),oxHk:zeros(),oxSec:zeros(),oxComm:zeros(),oxOth:zeros(),oxCons:zeros(),oxBank:zeros()};
+    var stCalc=[];
+    stores.forEach(function(c){
+      var s={rv:zeros(),disc:zeros(),gsv:zeros(),nv:zeros(),cg:zeros(),gm:zeros(),rn:zeros(),sf:zeros(),
+             ut:zeros(),ox:zeros(),mk:zeros(),co:zeros(),eb:zeros(),
+             dep:zeros(),ebit:zeros(),cx:zeros(),sd:zeros(),
+             psfpd:zeros(),opArea:zeros(),mgComp:zeros(),rsComp:zeros(),camComp:zeros(),
+             oxRm:zeros(),oxHk:zeros(),oxSec:zeros(),oxComm:zeros(),oxOth:zeros(),oxCons:zeros(),oxBank:zeros()};
+      var annualStaff=0;
+      (c.staff||[]).forEach(function(st){annualStaff+=(st.count||0)*(st.ctcLakhs||0)*1e5/UNIT;});
+      var staffCostArr=zeros(); staffCostArr[0]=annualStaff;
+      var esc=c.staffEscLocal||S.staffEsc;
+      for(var y=1;y<NY;y++) staffCostArr[y]=staffCostArr[y-1]*(1+(esc[y]||0));
+      var rentFactor=zeros(); rentFactor[0]=1;
+      for(var y=1;y<NY;y++) rentFactor[y]=rentFactor[y-1]*(1+(S.rentEsc[y]||0));
+      var opexFactor=zeros(); opexFactor[0]=1;
+      for(var y=1;y<NY;y++) opexFactor[y]=opexFactor[y-1]*(1+(S.opexEsc[y]||0));
+      var cumCapex=zeros();
+      for(var y=0;y<NY;y++){
+        var opM=c.opM[y]||0; if(opM===0)continue;
+        var opFrac=opM/12;
+        s.opArea[y]=opM*(c.area||0)*DPM;
+        if(y===0){
+          var dailySales=(c.footfall||0)*(c.conv||0)*(c.atv||0);
+          s.psfpd[y]=(c.area&&dailySales)?(dailySales/(c.area||1)):0;
+          s.rv[y]=s.opArea[y]*s.psfpd[y]/UNIT;
+        } else {
+          var prevOpM=c.opM[y-1]||12;
+          var prevAnn=prevOpM>0?(s.rv[y-1]/(prevOpM/12)):0;
+          s.rv[y]=prevAnn*(1+(c.lfl[y]||0))*opFrac;
+          s.psfpd[y]=s.opArea[y]>0?(s.rv[y]*UNIT/s.opArea[y]):0;
+        }
+        // Apply weighted seasonal discount: GSV = MRP − Discount, NSV = GSV × (1−partner) × (1−GST)
+        var wd=wtdDiscYear(k,y);
+        s.disc[y]=s.rv[y]*wd;
+        s.gsv[y]=s.rv[y]-s.disc[y];
+        s.nv[y]=s.gsv[y]*(1-(cs.partnerM||0))*(1-(cs.gst||0));
+        var cogsRate=(cs.fob||0)*(1+(cs.duty||0))+(cs.royalty||0)+(cs.salesRoy||0)+(cs.deval||0)+(cs.shrink||0)+(cs.scm||0);
+        s.cg[y]=s.nv[y]*cogsRate;
+        s.gm[y]=s.nv[y]-s.cg[y];
+        s.sf[y]=staffCostArr[y]*opFrac;
+        var mgR=(c.mgRate||0)*rentFactor[y], camR=(c.camRate||0)*rentFactor[y];
+        s.mgComp[y]=mgR*(c.area||0)*opM/UNIT;
+        s.rsComp[y]=(c.revSharePct[y]||.15)*s.nv[y];
+        s.camComp[y]=camR*(c.area||0)*opM/UNIT;
+        s.rn[y]=Math.max(s.mgComp[y],s.rsComp[y])+s.camComp[y];
+        s.ut[y]=(c.utilities||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        var sqftOpex=((c.rm||0)+(c.hk||0)+(c.security||0)+(c.comm||0)+(c.otherExp||0))*opexFactor[y]*(c.area||0)*opM/UNIT;
+        var pctOpex=((c.consPct[y]||.01)+(c.bankChgPct[y]||.01))*s.nv[y];
+        s.ox[y]=sqftOpex+pctOpex;
+        // Per-head breakdown
+        s.oxRm[y]=(c.rm||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        s.oxHk[y]=(c.hk||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        s.oxSec[y]=(c.security||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        s.oxComm[y]=(c.comm||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        s.oxOth[y]=(c.otherExp||0)*opexFactor[y]*(c.area||0)*opM/UNIT;
+        s.oxCons[y]=(c.consPct[y]||.01)*s.nv[y];
+        s.oxBank[y]=(c.bankChgPct[y]||.01)*s.nv[y];
+        var mktg=c.mktgPctLocal||S.mktgPct;
+        s.mk[y]=(mktg[y]||.02)*s.nv[y];
+        s.co[y]=(S.corpOH[k][y]||.05)*s.nv[y];
+        s.eb[y]=s.gm[y]-s.sf[y]-s.rn[y]-s.ut[y]-s.ox[y]-s.mk[y]-s.co[y];
+        var isOpening=(y===0)||(y>0&&(c.opM[y-1]||0)===0);
+        s.cx[y]=isOpening?((c.cpxPsf||0)*(c.area||0)/UNIT):0;
+        s.cx[y]+=(c.renCpxPsf[y]||0)*(c.area||0)/UNIT;
+        cumCapex[y]=(y>0?cumCapex[y-1]:0)+s.cx[y];
+        var ul=S.usefulLife[y]||9;
+        s.dep[y]=cumCapex[y]*(1/ul)/12*opM;
+        s.ebit[y]=s.eb[y]-s.dep[y];
+        s.sd[y]=isOpening?((c.depMonths[y]||0)*s.rn[y]/(opM||12)):0;
+        ['rv','disc','gsv','nv','cg','gm','rn','sf','ut','ox','mk','co','eb','dep','ebit','cx','sd',
+         'oxRm','oxHk','oxSec','oxComm','oxOth','oxCons','oxBank'].forEach(function(p){ch[p][y]+=s[p][y];});
+      }
+      stCalc.push({name:c.name,s:s});
+    });
+    ch.stores=stCalc; R[k]=ch;
+  });
+
+  var T={};
+  ['rv','disc','gsv','nv','cg','gm','rn','sf','ut','ox','mk','co','eb','dep','ebit','cx','sd',
+   'oxRm','oxHk','oxSec','oxComm','oxOth','oxCons','oxBank'].forEach(function(p){
+    T[p]=zeros(); for(var y=0;y<NY;y++) T[p][y]=CK.reduce(function(s,k){return s+(R[k][p][y]||0);},0);
+  });
+  T.tax=zeros(); T.pat=zeros();
+  for(var y=0;y<NY;y++){
+    T.tax[y]=T.ebit[y]>0?T.ebit[y]*(S.taxRate[y]||.2517):0;
+    T.pat[y]=T.ebit[y]-T.tax[y];
+  }
+
+  var CF={pat:T.pat.slice(),dep:T.dep.slice(),wc:zeros(),ocf:zeros(),icf:zeros(),ncf:zeros(),cum:zeros()};
+  for(var y=0;y<NY;y++){
+    var dwc=0;
+    CK.forEach(function(k){
+      var r=R[k],w=S.wc[k];
+      var nextCogs=y<NY-1?r.cg[y+1]:r.cg[y]*1.05;
+      var inv=nextCogs*(w.invDays[y]||180)/365;
+      var deb=(r.nv[y]+r.nv[y]*(S.cs[k].gst||0))*(w.debDays[y]||3)/365;
+      var cred=nextCogs*(w.credDays[y]||30)/365;
+      var nwc=inv+deb-cred, prevNwc=0;
+      if(y>0){
+        var pCogs=r.cg[y];
+        prevNwc=(pCogs*(w.invDays[y-1]||180)/365)+((r.nv[y-1]+r.nv[y-1]*(S.cs[k].gst||0))*(w.debDays[y-1]||3)/365)-(pCogs*(w.credDays[y-1]||30)/365);
+      }
+      dwc+=-(nwc-prevNwc);
+    });
+    CF.wc[y]=dwc;
+    CF.ocf[y]=CF.pat[y]+CF.dep[y]+CF.wc[y];
+    CF.icf[y]=-T.cx[y]-T.sd[y];
+    CF.ncf[y]=CF.ocf[y]+CF.icf[y];
+    CF.cum[y]=y>0?CF.cum[y-1]+CF.ncf[y]:CF.ncf[y];
+  }
+
+  // IRR (Newton-Raphson)
+  var irr=0.1;
+  try{for(var it=0;it<300;it++){var npv=0,dn=0;for(var y=0;y<NY;y++){var v=CF.ncf[y];npv+=v/Math.pow(1+irr,y+1);dn+=(-(y+1)*v)/Math.pow(1+irr,y+2);}if(Math.abs(dn)<1e-15)break;irr-=npv/dn;if(Math.abs(npv)<1e-10)break;}}catch(e){irr=0;}
+  if(!isFinite(irr)||irr<-1||irr>10) irr=0;
+
+  // NPV at WACC
+  var npvVal=CF.ncf.reduce(function(s,v,i){return s+v/Math.pow(1+(S.wacc[0]||.12),i+1);},0);
+
+  return{R:R,T:T,CF:CF,irr:irr,npv:npvVal};
+}
+
+// ════════════════════════════════════════════════════
+// CHART ENGINE (pure canvas — no dependencies)
+// ════════════════════════════════════════════════════
+function drawChart(canvasId,type,labels,datasets,opts){
+  var canvas=document.getElementById(canvasId); if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var W=canvas.offsetWidth||canvas.parentElement.offsetWidth||700;
+  var H=opts&&opts.h?opts.h:220;
+  canvas.width=W; canvas.height=H;
+  ctx.clearRect(0,0,W,H);
+  var pad={t:16,r:16,b:36,l:56};
+  var cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+
+  // Compute ranges
+  var allVals=[]; datasets.forEach(function(d){d.data.forEach(function(v){allVals.push(v||0);});});
+  var minV=Math.min(0,Math.min.apply(null,allVals));
+  var maxV=Math.max.apply(null,allVals)||1;
+  var range=maxV-minV; if(range===0)range=1;
+  // Nice ticks
+  var rawStep=range/5; var mag=Math.pow(10,Math.floor(Math.log10(rawStep)));
+  var step=Math.ceil(rawStep/mag)*mag||1;
+  var yMin=Math.floor(minV/step)*step; var yMax=Math.ceil(maxV/step)*step;
+  var yRange=yMax-yMin||1;
+
+  function xPos(i){return pad.l+i*(cW/(labels.length-1));}
+  function yPos(v){return pad.t+cH-(((v||0)-yMin)/yRange)*cH;}
+  function xBar(i){
+    var bw=cW/labels.length;
+    if(type==='bar-multi') bw=cW/(labels.length*datasets.length+1);
+    return pad.l+i*(cW/labels.length)+cW/(labels.length*2);
+  }
+
+  // Grid lines
+  ctx.strokeStyle='rgba(0,0,0,.05)'; ctx.lineWidth=1;
+  for(var tick=yMin;tick<=yMax+step*.01;tick+=step){
+    var y=yPos(tick);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#a39d94'; ctx.font='10px Figtree,sans-serif'; ctx.textAlign='right';
+    ctx.fillText(tick>=1e7?fCr(tick):(tick>=1000?(tick/100).toFixed(0)+'%':tick.toFixed(tick<1?1:0)),pad.l-4,y+3.5);
+  }
+
+  // Zero line
+  if(minV<0&&maxV>0){
+    ctx.strokeStyle='rgba(0,0,0,.18)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(pad.l,yPos(0)); ctx.lineTo(W-pad.r,yPos(0)); ctx.stroke();
+  }
+
+  // Data
+  if(type==='line'){
+    datasets.forEach(function(ds,di){
+      ctx.strokeStyle=ds.color; ctx.lineWidth=2.5; ctx.lineJoin='round';
+      ctx.beginPath();
+      ds.data.forEach(function(v,i){
+        var x=xPos(i),y=yPos(v);
+        if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+      // Area fill
+      if(ds.fill){
+        ctx.save();
+        ctx.beginPath();
+        ds.data.forEach(function(v,i){var x=xPos(i),y=yPos(v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+        ctx.lineTo(xPos(ds.data.length-1),yPos(0)); ctx.lineTo(xPos(0),yPos(0)); ctx.closePath();
+        ctx.fillStyle=ds.color.replace(')',',0.08)').replace('rgb','rgba'); ctx.fill(); ctx.restore();
+      }
+      // Dots
+      ds.data.forEach(function(v,i){
+        var x=xPos(i),y=yPos(v);
+        ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2);
+        ctx.fillStyle=ds.color; ctx.fill();
+        ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
+      });
+    });
+  } else if(type==='bar'||type==='bar-multi'){
+    var bw=(cW/labels.length)*0.7;
+    var nd=datasets.length;
+    datasets.forEach(function(ds,di){
+      ds.data.forEach(function(v,i){
+        var x0=pad.l+i*(cW/labels.length)+(cW/labels.length)*.15;
+        if(nd>1) x0=pad.l+i*(cW/labels.length)+(cW/labels.length)*.05+di*(bw/nd)*1.02;
+        var barW=nd>1?bw/nd*.9:bw;
+        var base=yPos(0), top=yPos(v||0);
+        var h=Math.abs(base-top)||1;
+        var y=v>=0?top:base;
+        ctx.fillStyle=ds.color;
+        ctx.beginPath();
+        var r2=Math.min(3,barW/2,h/2);
+        if(v>=0){ctx.roundRect?ctx.roundRect(x0,y,barW,h,r2):ctx.rect(x0,y,barW,h);}
+        else{ctx.roundRect?ctx.roundRect(x0,base,barW,-h,r2):ctx.rect(x0,base,barW,-h);}
+        ctx.fill();
+      });
+    });
+  }
+
+  // X axis labels
+  ctx.fillStyle='#7a756d'; ctx.font='10px Figtree,sans-serif'; ctx.textAlign='center';
+  labels.forEach(function(l,i){
+    var x=type==='line'?xPos(i):(pad.l+(i+.5)*(cW/labels.length));
+    ctx.fillText(l,x,H-6);
+  });
+}
+
+// Sparkline (tiny inline chart)
+function sparkSVG(data,color){
+  var w=64,h=28;
+  if(!data||!data.some(function(v){return v>0;})) return '<svg width="'+w+'" height="'+h+'"></svg>';
+  var mn=Math.min.apply(null,data), mx=Math.max.apply(null,data);
+  var rng=mx-mn||1;
+  var pts=data.map(function(v,i){
+    var x=2+(i/(data.length-1))*(w-4);
+    var y=h-2-((v-mn)/rng)*(h-4);
+    return x.toFixed(1)+','+y.toFixed(1);
+  }).join(' ');
+  return '<svg width="'+w+'" height="'+h+'" class="spark"><polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linejoin="round"/></svg>';
+}
+
+// ════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════
+function toast(msg,type,dur){
+  type=type||'info'; dur=dur||2800;
+  var el=document.createElement('div');
+  el.className='toast-msg '+type;
+  var icons={success:'✓',error:'✕',info:'ℹ'};
+  el.innerHTML='<span style="font-weight:800">'+icons[type]+'</span> '+msg;
+  var wrap=document.getElementById('toast');
+  wrap.appendChild(el);
+  setTimeout(function(){el.style.animation='toastIn .2s ease reverse';setTimeout(function(){wrap.removeChild(el);},180);},dur);
+}
+
+// ════════════════════════════════════════════════════
+// INVENTORY ENGINE
+// For channel k with results R (from calc()), produce full season flow
+// ════════════════════════════════════════════════════
+function calcInventory(k,R){
+  var cs=S.cs[k], inv=S.inv, ch=inv.chSettings[k];
+  if(!ch) return null;
+
+  // Unit cost (% of MRP) — excludes sales royalty, shrink, scm (those are P&L items)
+  var fob=cs.fob||0, duty=cs.duty||0, roy=cs.royalty||0;
+  var unitCostRate=fob*(1+duty)+roy;   // landed cost per ₹ MRP
+  var unitDutyRate=fob*duty;           // duty portion (for RTV duty loss)
+  var dutyPerCost=unitCostRate>0?(unitDutyRate/unitCostRate):0;
+
+  var NS=10*inv.seasonsPerYear, splits=inv.seasonSplit;
+  // ── Per-season demand at cost basis ──
+  // KEY INSIGHT: inventory cost = MRP × unitCostRate (discount doesn't affect physical cost)
+  // So demand at cost = rv_season (MRP basis) × unitCostRate
+  var demand=[];
+  for(var y=0;y<10;y++){
+    for(var sIdx=0;sIdx<inv.seasonsPerYear;sIdx++){
+      var rvSeason=(R.rv[y]||0)*(splits[sIdx]||(1/inv.seasonsPerYear));
+      demand.push(rvSeason*unitCostRate);
+    }
+  }
+  var cumSellThru=ch.sellThru.reduce(function(a,v){return a+(v||0);},0)||1;
+
+  // ── Stock Floor calculation ──
+  // Floor days = min store stock + safety warehouse (applies to all channels)
+  var floorDays=(ch.minStoreStockDays||0)+(ch.safetyWarehouseDays||0);
+  var seasonDays=365/inv.seasonsPerYear;
+  // Per-season floor requirement (at cost basis)
+  var floorReqd=demand.map(function(d){return d*(floorDays/seasonDays);});
+
+  var cohorts=[]; // active cohorts
+  var cohortHistory=[]; // liquidated cohorts kept for grid
+  var flow=[];
+
+  for(var t=0;t<NS;t++){
+    var floor_t=floorReqd[t]||0;
+    var floor_prev=t===0?0:(flow[t-1].floorStock||0);
+    var floorBuy=Math.max(0,floor_t-floor_prev);       // incremental top-up when floor grows
+    var floorRelease=Math.max(0,floor_prev-floor_t);   // freed up when floor shrinks (informational)
+
+    var workingOpening=t===0?0:(flow[t-1].workingClosing||0);
+
+    // Cohort-based buy sizing with MOQ floor
+    var targetBuy=cumSellThru>0?(demand[t]/cumSellThru*inv.coverRatio):0;
+    var cohortBuys=0;
+    if(demand[t]>0.0001){
+      cohortBuys=Math.max(targetBuy,inv.minBuyPerSeason);
+    }
+
+    // Total buys this season = cohort buys (for sell-through) + floor buy (safety stock top-up)
+    var totalBuys=cohortBuys+floorBuy;
+
+    // New cohort (only cohort buys enter cohort flow — floor stock is held separately)
+    var newCohort={buyValue:cohortBuys,remaining:cohortBuys,age:0,birthSeason:t,rtvReturn:0,deval:0,salesBySeason:{}};
+    if(cohortBuys>0) cohorts.push(newCohort);
+
+    // Compute sales from active cohorts (sell-through is % of ORIGINAL buy)
+    var sales=0;
+    cohorts.forEach(function(c){
+      if(c.age<inv.seasonLife&&c.remaining>0){
+        var sellAmt=c.buyValue*(ch.sellThru[c.age]||0);
+        if(sellAmt>c.remaining) sellAmt=c.remaining;
+        c.remaining-=sellAmt;
+        c.salesBySeason[t]=sellAmt;
+        sales+=sellAmt;
+      }
+    });
+    cohorts.forEach(function(c){c.age+=1;});
+
+    // RTV on new cohort
+    var rtvReturn=0, rtvSwap=0, rtvFreight=0, rtvDutyLoss=0;
+    if(cohortBuys>0){
+      var returnTarget=cohortBuys*(ch.rtvReturnPct||0);
+      var swapTarget=cohortBuys*(ch.rtvSwapPct||0);
+      rtvReturn=Math.min(returnTarget,newCohort.remaining);
+      newCohort.remaining-=rtvReturn;
+      newCohort.rtvReturn=rtvReturn;
+      rtvDutyLoss=rtvReturn*dutyPerCost;
+      rtvSwap=swapTarget;
+      rtvFreight=(rtvReturn+rtvSwap)*(ch.rtvFreightRate||0);
+    }
+
+    // Devaluation on terminal cohorts
+    var deval=0;
+    for(var i=cohorts.length-1;i>=0;i--){
+      if(cohorts[i].age>=inv.seasonLife){
+        cohorts[i].deval=cohorts[i].remaining*inv.devalRate;
+        deval+=cohorts[i].deval;
+        cohortHistory.push(cohorts[i]);
+        cohorts.splice(i,1);
+      }
+    }
+
+    var workingClosing=cohorts.reduce(function(s,c){return s+c.remaining;},0);
+    var totalClosing=workingClosing+floor_t;
+    var totalOpening=workingOpening+floor_prev;
+
+    flow.push({
+      opening:totalOpening, workingOpening:workingOpening, floorOpening:floor_prev,
+      buys:totalBuys, cohortBuys:cohortBuys, floorBuy:floorBuy, floorRelease:floorRelease,
+      sales:sales,
+      rtvReturn:rtvReturn, rtvSwap:rtvSwap,
+      rtvFreight:rtvFreight, rtvDutyLoss:rtvDutyLoss,
+      deval:deval,
+      closing:totalClosing, workingClosing:workingClosing, floorStock:floor_t,
+      demand:demand[t]
+    });
+  }
+
+  var allCohorts=cohortHistory.concat(cohorts).sort(function(a,b){return a.birthSeason-b.birthSeason;});
+
+  // Annual rollup
+  var ann={buys:zeros(),cohortBuys:zeros(),floorBuy:zeros(),sales:zeros(),
+           rtvReturn:zeros(),rtvSwap:zeros(),rtvFreight:zeros(),rtvDutyLoss:zeros(),
+           deval:zeros(),closing:zeros(),floorStock:zeros(),workingClosing:zeros()};
+  flow.forEach(function(f,t){
+    var y=Math.floor(t/inv.seasonsPerYear);
+    ['buys','cohortBuys','floorBuy','sales','rtvReturn','rtvSwap','rtvFreight','rtvDutyLoss','deval'].forEach(function(p){ann[p][y]+=f[p];});
+    if((t+1)%inv.seasonsPerYear===0){
+      ann.closing[y]=f.closing;
+      ann.floorStock[y]=f.floorStock;
+      ann.workingClosing[y]=f.workingClosing;
+    }
+  });
+
+  return{
+    flow:flow, annual:ann, cohorts:allCohorts,
+    params:{
+      unitCostRate:unitCostRate, unitDutyRate:unitDutyRate,
+      cumSellThru:cumSellThru, dutyPerCost:dutyPerCost,
+      floorDays:floorDays, seasonDays:seasonDays
+    }
+  };
+}
+
+// ════════════════════════════════════════════════════
+// INVENTORY UPDATERS
+// ════════════════════════════════════════════════════
+function uInv(f,v,pct){S.inv[f]=pct?(parseFloat(v)/100||0):(parseFloat(v)||0);redraw();}
+function uInvSplit(i,v){S.inv.seasonSplit[i]=(parseFloat(v)||0)/100;redraw();}
+function uInvSPY(v){
+  var n=parseInt(v)||2;
+  var newNS=10*n;
+  S.inv.seasonsPerYear=n;
+  // Reset split to even
+  S.inv.seasonSplit=[]; for(var i=0;i<n;i++) S.inv.seasonSplit.push(1/n);
+  // Resize discountBySeason arrays per channel (extend with last value or shrink)
+  CK.forEach(function(k){
+    var ch=S.inv.chSettings[k];
+    var old=ch.discountBySeason||[];
+    var newArr=[];
+    var fallback=(old.length>0?old[old.length-1]:0.15);
+    for(var i=0;i<newNS;i++){
+      newArr.push(old[i]!=null?old[i]:fallback);
+    }
+    ch.discountBySeason=newArr;
+  });
+  redraw();
+}
+function uInvCh(k,f,v,pct){S.inv.chSettings[k][f]=pct?(parseFloat(v)/100||0):(parseFloat(v)||0);redraw();}
+function uInvChST(k,i,v){S.inv.chSettings[k].sellThru[i]=(parseFloat(v)||0)/100;redraw();}
+// NEW: per-channel per-season discount
+function uInvChDS(k,i,v){S.inv.chSettings[k].discountBySeason[i]=(parseFloat(v)||0)/100;redraw();}
+// NEW: apply same discount to all seasons of a channel (bulk edit)
+function uInvChDAll(k,v){
+  var val=(parseFloat(v)||0)/100;
+  var NS=10*S.inv.seasonsPerYear;
+  for(var i=0;i<NS;i++) S.inv.chSettings[k].discountBySeason[i]=val;
+  redraw();
+}
+// NEW: stock floor days updater
+function uInvChFloor(k,f,v){S.inv.chSettings[k][f]=parseFloat(v)||0;redraw();}
+
+
+var SK='bizplan_v9_saves';
+function getSaves(){try{return JSON.parse(localStorage.getItem(SK)||'[]');}catch(e){return[];}}
+function savePlan(){
+  var nm=prompt('Save plan as:',S.name); if(!nm)return;
+  S.name=nm; document.getElementById('pname').textContent=nm+' ✎';
+  var saves=getSaves();
+  var c=calc();
+  var entry={name:nm,date:new Date().toISOString(),data:JSON.parse(JSON.stringify(S)),
+    meta:{irr:c.irr,nsv10:c.T.nv[9],ebitda10:c.T.eb[9],stores:CK.reduce(function(s,k){return s+S.stores[k].length;},0)}};
+  var idx=-1; saves.forEach(function(s,i){if(s.name===nm)idx=i;});
+  if(idx>=0)saves[idx]=entry; else saves.push(entry);
+  localStorage.setItem(SK,JSON.stringify(saves));
+  toast('Saved: '+nm,'success'); draw();
+  syncToSharePoint(); // ← Graph API sync
+}
+function loadPlan(i){
+  var s=getSaves(); if(!s[i])return;
+  Object.keys(s[i].data).forEach(function(k){S[k]=s[i].data[k];});
+  document.getElementById('pname').textContent=S.name+' ✎';
+  toast('Loaded: '+s[i].name,'success'); draw();
+}
+function delPlan(i){
+  var s=getSaves(); if(!s[i]||!confirm('Delete "'+s[i].name+'"?'))return;
+  var nm=s[i].name; s.splice(i,1); localStorage.setItem(SK,JSON.stringify(s));
+  toast('Deleted: '+nm,'error'); draw();
+}
+function dupPlan(i){
+  var s=getSaves(); if(!s[i])return;
+  var nm=prompt('Duplicate as:',s[i].name+' (Copy)'); if(!nm)return;
+  var entry=JSON.parse(JSON.stringify(s[i])); entry.name=nm; entry.date=new Date().toISOString();
+  s.push(entry); localStorage.setItem(SK,JSON.stringify(s));
+  toast('Duplicated as: '+nm,'info'); draw();
+}
+
+// ════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════
+var PG=[
+  {id:'home',l:'Dashboard',g:'Overview',ic:'◉'},
+  {id:'saves',l:'Saved Plans',g:'Overview',ic:'○'},
+  {id:'cost',l:'Cost Sheet',g:'Assumptions',ic:'◈'},
+  {id:'wc',l:'Working Capital',g:'Assumptions',ic:'◈'},
+  {id:'central',l:'Central Costs',g:'Assumptions',ic:'◈'}
+];
+CK.forEach(function(k){PG.push({id:'ch_'+k,l:CI[k]+' '+CN[k],g:'Channels',dt:CL[k]});});
+PG.push({id:'pl',l:'Detailed P&L',g:'Financials',ic:'◧'});
+PG.push({id:'cf',l:'Cash Flow',g:'Financials',ic:'◧'});
+PG.push({id:'es',l:'Executive Summary',g:'Decision',ic:'★'});
+PG.push({id:'chpl',l:'Channel P&L',g:'Decision',ic:'★'});
+PG.push({id:'con',l:'Consolidation',g:'Decision',ic:'★'});
+PG.push({id:'inv',l:'Inventory Model',g:'Decision',ic:'◲'});
+PG.push({id:'rollout',l:'Store Rollout Plan',g:'Decision',ic:'★'});
+PG.push({id:'compare',l:'Compare Plans',g:'Decision',ic:'★'});
+
+var cur='home', aSt={}, _tab={}, _aCh='ebo', _invTab='setup'; // _invTab: 'setup' or 'movement'
+CK.forEach(function(k){aSt[k]=0; _tab[k]='pl';});
+
+function go(id){cur=id;draw();}
+function setTab(k,t){_tab[k]=t;draw();}
+function selInvCh(k){_aCh=k;draw();}
+function setInvTab(t){_invTab=t;draw();}
+
+// ════════════════════════════════════════════════════
+// FOCUS-PRESERVING REDRAW
+// ════════════════════════════════════════════════════
+var _fidCounter=0;
+function redraw(){
+  // Capture which input triggered the change (for Enter-key case where focus stays)
+  var ae=document.activeElement, focusId=null;
+  if(ae&&ae.tagName==='INPUT'&&ae.dataset.fid) focusId=ae.dataset.fid;
+  draw();
+  // Re-focus only if user pressed Enter (element still existed in new DOM)
+  if(focusId){
+    var el=document.querySelector('[data-fid="'+focusId+'"]');
+    if(el) el.focus();
+  }
+}
+
+function draw(){
+  _fidCounter=0;
+  // Sidebar
+  var sb='',lg='';
+  PG.forEach(function(p){
+    if(p.g!==lg){sb+='<div class="gl">'+p.g+'</div>';lg=p.g;}
+    var dot=p.dt?'<span class="dt" style="background:'+p.dt+'"></span>':'';
+    var cnt='';
+    if(p.id.indexOf('ch_')===0){var n=S.stores[p.id.slice(3)].length;if(n)cnt='<span class="cnt">'+n+'</span>';}
+    if(p.id==='saves'){var sv=getSaves();if(sv.length)cnt='<span class="cnt">'+sv.length+'</span>';}
+    sb+='<div class="ni'+(cur===p.id?' on':'')+'" onclick="go(\''+p.id+'\')">'+dot+(p.l||'')+''+cnt+'</div>';
+  });
+  document.getElementById('sd').innerHTML=sb;
+
+  var el=document.getElementById('mn'), c=calc();
+  try{
+    var pages={home:function(){return pgHome(c);},saves:pgSaves,cost:function(){return pgCost(c);},
+      wc:pgWC,central:pgCentral,pl:function(){return pgPL(c);},cf:function(){return pgCF(c);},
+      es:function(){return pgES(c);},chpl:function(){return pgChPL(c);},con:function(){return pgCon(c);},
+      compare:pgCompare,rollout:pgRollout,inv:function(){return pgInventory(c);}};
+    if(pages[cur])el.innerHTML=pages[cur]();
+    else if(cur.indexOf('ch_')===0)el.innerHTML=pgCH(cur.slice(3),c);
+    else el.innerHTML='<div class="cd">Page not found</div>';
+  }catch(e){
+    el.innerHTML='<div class="cd red-l"><h3>⚠ Calculation Error</h3><p style="color:var(--rd)">'+e.message+'</p><pre style="font-size:11px;margin-top:8px;color:var(--t3);white-space:pre-wrap">'+e.stack+'</pre></div>';
+  }
+  // Draw charts after DOM settles
+  setTimeout(drawCurrentCharts,10);
+}
+
+var _chartData={};
+function drawCurrentCharts(){
+  if(_chartData.home) drawHomeCharts(_chartData.home);
+  if(_chartData.ch) drawChCharts(_chartData.ch);
+}
+
+// ════════════════════════════════════════════════════
+// UPDATERS
+// ════════════════════════════════════════════════════
+function uCS(k,f,v){S.cs[k][f]=parseFloat(v)/100||0;redraw();}
+function uCorpOH(k,i,v){S.corpOH[k][i]=parseFloat(v)/100||0;redraw();}
+function uGlobal(arr,i,v,pct){S[arr][i]=pct?(parseFloat(v)/100||0):(parseFloat(v)||0);redraw();}
+function uWC(k,f,i,v){S.wc[k][f][i]=parseFloat(v)||0;redraw();}
+function uST(k,idx,f,v){S.stores[k][idx][f]=parseFloat(v)||0;redraw();}
+function uSTpct(k,idx,f,v){S.stores[k][idx][f]=(parseFloat(v)||0)/100;redraw();}
+function uSTA(k,idx,f,i,v,pct){
+  var val=pct?(parseFloat(v)/100||0):(parseFloat(v)||0);
+  var t=S.stores[k][idx][f];
+  if(Array.isArray(t))t[i]=val; else S.stores[k][idx][f]=val;
+  redraw();
+}
+function uStaff(k,idx,si,f,v){
+  if(f==='title')S.stores[k][idx].staff[si].title=v;
+  else S.stores[k][idx].staff[si][f]=parseFloat(v)||0;
+  redraw();
+}
+function addSt(k){var n=prompt('Store name:','Store '+(S.stores[k].length+1));if(!n)return;S.stores[k].push(newStore(n));aSt[k]=S.stores[k].length-1;draw();}
+function rmSt(k,i){if(!confirm('Remove "'+S.stores[k][i].name+'"?'))return;S.stores[k].splice(i,1);aSt[k]=Math.max(0,S.stores[k].length-1);draw();}
+function selSt(k,i){aSt[k]=i;draw();}
+function addStaffRow(k,idx){S.stores[k][idx].staff.push({title:'',count:0,ctcLakhs:0});draw();}
+function renamePlan(){var n=prompt('Plan name:',S.name);if(!n)return;S.name=n;document.getElementById('pname').textContent=n+' ✎';draw();}
+function rmStaffRow(k,idx,si){S.stores[k][idx].staff.splice(si,1);draw();}
+
+// ════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════
+function mi(oc,v,pct){
+  var d=pct?((v||0)*100).toFixed(1):(v!=null&&v!==0?v:'');
+  var fid='f'+(++_fidCounter);
+  return '<input class="inp" type="number" step="any" value="'+d+'" data-fid="'+fid+'" onchange="'+oc+'">';
+}
+function miTxt(oc,v,fid){
+  return '<input class="inp-txt wide" type="text" value="'+(v||'')+'" data-fid="'+(fid||'ft'+(++_fidCounter))+'" onchange="'+oc+'">';
+}
+function sm(a){return a.reduce(function(s,v){return s+(v||0);},0);}
+function tbl(h,rows){
+  var o='<div class="tw"><table><thead><tr>';
+  h.forEach(function(x){o+='<th>'+x+'</th>';});
+  o+='</tr></thead><tbody>';
+  rows.forEach(function(r){
+    if(!r)return;
+    o+='<tr'+(r._c?' class="'+r._c+'"':'')+'>';
+    h.forEach(function(k){
+      var v=r[k];
+      var neg=typeof v==='string'&&(v.charAt(0)==='('||v.startsWith('(₹'));
+      var pos=typeof v==='string'&&v.charAt(0)==='₹'&&r._c==='tot';
+      o+='<td'+(neg?' class="neg"':pos?' class="pos"':'')+'>'+(v!=null?v:'')+'</td>';
+    });
+    o+='</tr>';
+  });
+  return o+'</tbody></table></div>';
+}
+function rw(l,a,cls){var r={P:l,_c:cls||''};YR.forEach(function(y,i){r[y]=fCr(a[i]);});r['10yr']=fCr(sm(a));return r;}
+function rp(l,n,d){var r={P:l,_c:'dim'};YR.forEach(function(y,i){r[y]=d[i]?fp(n[i]/d[i]):'—';});r['10yr']='';return r;}
+function rw2(l,a,cls){var r={Metric:l,_c:cls||''};YR.forEach(function(y,i){r[y]=fCr(a[i]);});r.Total=fCr(sm(a));return r;}
+var HD=['P'].concat(YR).concat(['10yr']);
+
+// ════════════════════════════════════════════════════
+// PAGE: DASHBOARD
+// ════════════════════════════════════════════════════
+function pgHome(c){
+  var T=c.T,CF=c.CF;
+  var totalSt=CK.reduce(function(s,k){return s+S.stores[k].length;},0);
+  var has=T.nv.some(function(v){return v>0;});
+  var ok=has&&c.irr>=(S.wacc[0]||.12);
+  var pk=has?Math.min.apply(null,CF.cum):0;
+  var pb='N/A';if(has)for(var y=0;y<NY;y++)if(CF.cum[y]>=0){pb='~'+(y+1)+' yrs';break;}
+
+  _chartData.home=has?c:null; _chartData.ch=null;
+
+  var h='<div class="pg-hd"><div class="pg-hd-left"><h2>'+S.name+'</h2><p class="subtitle">10-Year Business Plan Dashboard · All amounts in ₹ Crores</p></div>';
+  if(totalSt===0) h+='<div class="pg-hd-right"><button class="btn primary" onclick="go(\'ch_ebo\')">+ Add First Store</button></div>';
+  h+='</div>';
+
+  // Banner
+  h+='<div class="ban '+(has?(ok?'go':'no'):'wt')+'">';
+  h+=has?(ok?'✅ Recommended GO — IRR '+fp(c.irr)+' beats WACC '+fp(S.wacc[0]):'❌ Not Recommended — IRR '+fp(c.irr)+' below WACC '+fp(S.wacc[0])):'⏳ Add stores and fill assumptions to begin';
+  h+='</div>';
+
+  // KPIs
+  h+='<div class="kpg">';
+  h+='<div class="kp"><div class="kl">NSV Year 10</div><div class="kv">'+fCr(T.nv[9])+'</div><div class="ks">vs Yr1: '+fCr(T.nv[0])+'</div>'+sparkSVG(T.nv,'#2a5a3c')+'</div>';
+  h+='<div class="kp g"><div class="kl">EBITDA % Yr10</div><div class="kv">'+(T.nv[9]?fp(T.eb[9]/T.nv[9]):'—')+'</div><div class="ks">Yr5: '+(T.nv[4]?fp(T.eb[4]/T.nv[4]):'—')+'</div>'+sparkSVG(T.eb,'#1a7a42')+'</div>';
+  h+='<div class="kp b"><div class="kl">IRR (10 Year)</div><div class="kv">'+fp(c.irr)+'</div><div class="ks">WACC: '+fp(S.wacc[0]||.12)+'</div></div>';
+  h+='<div class="kp a"><div class="kl">NPV at WACC</div><div class="kv">'+fCr(c.npv)+'</div><div class="ks">Discount rate: '+fp(S.wacc[0]||.12)+'</div></div>';
+  h+='<div class="kp a"><div class="kl">Payback Period</div><div class="kv">'+pb+'</div><div class="ks">Peak outflow: '+fCr(pk)+'</div></div>';
+  h+='<div class="kp r"><div class="kl">Total Capex</div><div class="kv">'+fCr(sm(T.cx))+'</div><div class="ks">+Deposits: '+fCr(sm(T.sd))+'</div></div>';
+  h+='<div class="kp"><div class="kl">Total Stores</div><div class="kv">'+totalSt+'</div><div class="ks">Across '+CK.filter(function(k){return S.stores[k].length>0;}).length+' channels</div></div>';
+  h+='<div class="kp"><div class="kl">10-Yr PAT</div><div class="kv">'+fCr(sm(T.pat))+'</div>'+sparkSVG(T.pat,'#2d5494')+'</div>';
+  h+='</div>';
+
+  // Charts row
+  if(has){
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">';
+    h+='<div class="cd" style="margin-bottom:0"><h3>Revenue & EBITDA Trend</h3><div class="chart-wrap"><canvas id="ch-home-rv" class="chart"></canvas></div>';
+    h+='<div class="chart-legend"><span class="chart-legend-item"><span class="chart-legend-dot" style="background:#2a5a3c"></span>NSV</span><span class="chart-legend-item"><span class="chart-legend-dot" style="background:#1a7a42"></span>EBITDA</span><span class="chart-legend-item"><span class="chart-legend-dot" style="background:#2d5494"></span>PAT</span></div></div>';
+    h+='<div class="cd" style="margin-bottom:0"><h3>Cumulative Cash Flow</h3><div class="chart-wrap"><canvas id="ch-home-cf" class="chart"></canvas></div></div>';
+    h+='</div>';
+  }
+
+  // Channel table
+  h+='<div class="cd"><h3>Channel Revenue (NSV) — ₹ Crores</h3>';
+  var chHd=['Channel','Stores'].concat(YR).concat(['Total']);
+  var chRows=CK.map(function(k){
+    var r={Channel:'<span style="color:'+CL[k]+'">●</span> '+CN[k],Stores:S.stores[k].length||'—'};
+    YR.forEach(function(y,i){r[y]=fCr(c.R[k].nv[i]);});
+    r.Total=fCr(sm(c.R[k].nv)); return r;
+  });
+  var totRow={Channel:'<strong>CONSOLIDATED</strong>',_c:'tot',Stores:totalSt,Total:fCr(sm(T.nv))};
+  YR.forEach(function(y,i){totRow[y]=fCr(T.nv[i]);});
+  chRows.push(totRow);
+  h+=tbl(chHd,chRows)+'</div>';
+
+  // P&L summary
+  h+='<div class="cd"><h3>Consolidated P&L Summary</h3>';
+  h+=tbl(HD,[rw('Gross Revenue (MRP)',T.rv),rw('Net Revenue (NSV)',T.nv,'tot'),rw('Gross Margin',T.gm,'sub'),rp('GM %',T.gm,T.nv),
+    rw('EBITDA',T.eb,'tot'),rp('EBITDA %',T.eb,T.nv),rw('EBIT',T.ebit),rw('PAT',T.pat,'sub'),
+    rw('Net Cash Flow',CF.ncf),rw('Cumulative CF',CF.cum,'tot')])+'</div>';
+  return h;
+}
+
+function drawHomeCharts(c){
+  var T=c.T,CF=c.CF;
+  drawChart('ch-home-rv','line',YR.map(function(y){return y;}),
+    [{data:T.nv,color:'#2a5a3c',fill:true},{data:T.eb,color:'#1a7a42'},{data:T.pat,color:'#2d5494'}]);
+  drawChart('ch-home-cf','bar',YR.map(function(y){return y;}),
+    [{data:CF.cum,color:'#2d5494'}]);
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: SAVED PLANS
+// ════════════════════════════════════════════════════
+function pgSaves(){
+  var saves=getSaves();
+  var h='<h2>Saved Plans</h2><p class="subtitle">Save, load, duplicate, and compare business plan instances</p>';
+  h+='<div class="cd"><div style="display:flex;gap:8px;flex-wrap:wrap">';
+  h+='<button class="btn amber" onclick="savePlan()">💾 Save Current Plan</button>';
+  if(saves.length>1) h+='<button class="btn ghost" onclick="go(\'compare\')">⚖ Compare Plans</button>';
+  h+='</div></div>';
+  if(!saves.length)return h+'<div class="cd" style="text-align:center;padding:36px;color:var(--t3)"><div style="font-size:32px;margin-bottom:8px">📁</div><p style="font-size:15px;font-family:var(--hd)">No saved plans yet</p><p style="font-size:12px;margin-top:4px">Save your first plan using the button above</p></div>';
+  saves.forEach(function(sv,i){
+    var d=new Date(sv.date);
+    var m=sv.meta||{};
+    var st=m.stores||0;
+    h+='<div class="sv-item">';
+    h+='<div style="flex:1"><div class="sv-name">'+sv.name+'</div>';
+    h+='<div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">';
+    h+='<span class="sv-meta">'+d.toLocaleDateString('en-IN')+' '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+'</span>';
+    h+='<span class="sv-meta">• '+st+' stores</span>';
+    if(m.irr) h+='<span class="sv-kpi">IRR: '+fp(m.irr)+'</span>';
+    if(m.nsv10) h+='<span class="sv-kpi">NSV Yr10: '+fCr(m.nsv10)+'</span>';
+    if(m.ebitda10&&m.nsv10) h+='<span class="sv-kpi">EBITDA%: '+fp(m.ebitda10/m.nsv10)+'</span>';
+    h+='</div></div>';
+    h+='<button class="btn primary sm" onclick="loadPlan('+i+')">Load</button>';
+    h+='<button class="btn ghost sm" onclick="dupPlan('+i+')">Duplicate</button>';
+    h+='<button class="btn red sm" onclick="delPlan('+i+')">Delete</button></div>';
+  });
+
+  // Storage usage indicator
+  try{var used=new Blob([localStorage.getItem(SK)||'']).size;var pct=Math.min(100,used/51200*100);
+    h+='<div class="cd" style="padding:12px 16px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t3)"><span>Local storage used</span><span>'+(used/1024).toFixed(1)+' KB / 50 KB</span></div>';
+    h+='<div class="prog-bar"><div class="prog-bar-fill" style="width:'+pct.toFixed(0)+'%"></div></div></div>';}catch(e){}
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: COST SHEET
+// ════════════════════════════════════════════════════
+function pgCost(c){
+  var h='<h2>Cost Sheet</h2><p class="subtitle">Channel-wise COGS & deductions as % of MRP/NSV</p>';
+  var flds=[
+    ['Discount % on MRP','disc','Trade discount from MRP to GSV'],
+    ['Partner Margin % on GSV','partnerM','Retail partner / franchise margin'],
+    ['GST %','gst','Applicable GST rate'],
+    ['FOB % on MRP','fob','Free-on-board cost including manufacturing'],
+    ['Purchase Royalty %','royalty','Brand / IP royalty on purchases'],
+    ['Duty & Freight %','duty','Import duty and inbound freight'],
+    ['Sales Royalty %','salesRoy','Sales-linked royalty % of NSV'],
+    ['Devaluation %','deval','Markdown and end-of-season devaluation'],
+    ['Shrink %','shrink','Inventory shrinkage & pilferage'],
+    ['Supply Chain Cost %','scm','3PL, warehousing, last-mile logistics']
+  ];
+  var hd=['Cost Component'];CK.forEach(function(k){hd.push(CI[k]+' '+CN[k]);});
+  var rows=flds.map(function(f){
+    var r={'Cost Component':'<span title="'+f[2]+'" class="fi"><label>'+f[0]+'<span class="tip">?</span></label></span>'};
+    CK.forEach(function(k){r[CI[k]+' '+CN[k]]=mi("uCS('"+k+"','"+f[1]+"',this.value)",S.cs[k][f[1]],true);});
+    return r;
+  });
+  // COGS total row
+  var cogsRow={'Cost Component':'<strong>Total COGS %</strong>',_c:'sub'};
+  CK.forEach(function(k){
+    var cs=S.cs[k];
+    var cogs=(cs.fob||0)*(1+(cs.duty||0))+(cs.royalty||0)+(cs.salesRoy||0)+(cs.deval||0)+(cs.shrink||0)+(cs.scm||0);
+    cogsRow[CI[k]+' '+CN[k]]=fp(cogs);
+  });
+  rows.push(cogsRow);
+  // GM row
+  var gmRow={'Cost Component':'<strong>Gross Margin %</strong>',_c:'tot'};
+  CK.forEach(function(k){var n=c.R[k].nv[0],g=c.R[k].gm[0]; gmRow[CI[k]+' '+CN[k]]=n?fp(g/n):'—';});
+  rows.push(gmRow);
+  h+='<div class="cd">'+tbl(hd,rows)+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: WORKING CAPITAL
+// ════════════════════════════════════════════════════
+function pgWC(){
+  var h='<h2>Working Capital Days</h2><p class="subtitle">Inventory, Debtor & Creditor days per channel per year</p>';
+  CK.forEach(function(k){
+    h+='<div class="cd" style="border-left:4px solid '+CL[k]+'"><h3>'+CI[k]+' '+CN[k]+'</h3>';
+    var hd=['Parameter'].concat(YR);
+    var rows=[{Parameter:'Inventory Days'},{Parameter:'Debtor Days'},{Parameter:'Creditor Days'}];
+    [['invDays',S.wc[k].invDays],['debDays',S.wc[k].debDays],['credDays',S.wc[k].credDays]].forEach(function(m,mx){
+      YR.forEach(function(y,i){rows[mx][y]=mi("uWC('"+k+"','"+m[0]+"',"+i+",this.value)",m[1][i],false);});
+    });
+    h+=tbl(hd,rows)+'</div>';
+  });
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: CENTRAL COSTS
+// ════════════════════════════════════════════════════
+function pgCentral(){
+  var h='<h2>Central Costs & Assumptions</h2><p class="subtitle">Corporate overhead %, escalation rates, tax, depreciation & WACC</p>';
+  h+='<div class="cd"><h3>Corporate OH % of NSV (per channel, per year)</h3>';
+  var hd=['Channel'].concat(YR);
+  var rows=CK.map(function(k){
+    var r={Channel:CI[k]+' '+CN[k]};
+    YR.forEach(function(y,i){r[y]=mi("uCorpOH('"+k+"',"+i+",this.value)",S.corpOH[k][i],true);});
+    return r;
+  });
+  h+=tbl(hd,rows)+'</div>';
+
+  var globals=[
+    ['Staff Escalation %','staffEsc',true,'Annual salary increment %'],
+    ['Opex Escalation %','opexEsc',true,'Annual opex inflation %'],
+    ['Rent Escalation %','rentEsc',true,'Rent revision at escalation years'],
+    ['Marketing % of NSV','mktgPct',true,'Brand marketing spend'],
+    ['Tax Rate %','taxRate',true,'Effective corporate tax rate'],
+    ['Useful Life (Yrs)','usefulLife',false,'Asset useful life for depreciation'],
+    ['WACC %','wacc',true,'Hurdle rate for IRR comparison & NPV']
+  ];
+  h+='<div class="cd"><h3>Global Assumptions</h3>';
+  var hd2=['Parameter'].concat(YR);
+  var r2=globals.map(function(g){
+    var r={Parameter:'<span title="'+g[3]+'">'+g[0]+'</span>'};
+    YR.forEach(function(y,i){r[y]=mi("uGlobal('"+g[1]+"',"+i+",this.value,"+g[2]+")",S[g[1]][i],g[2]);});
+    return r;
+  });
+  h+=tbl(hd2,r2)+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: CHANNEL
+// ════════════════════════════════════════════════════
+function pgCH(k,c){
+  var st=S.stores[k], r=c.R[k], col=CL[k], ai=aSt[k];
+  _chartData.ch=null; _chartData.home=null;
+
+  var h='<div class="pg-hd"><div class="pg-hd-left">';
+  h+='<h2><span style="color:'+col+'">'+CI[k]+'</span> '+CN[k]+'</h2>';
+  h+='<p class="subtitle">'+st.length+' store(s) · Revenue = Footfall × Conv% × ATV · Rent = MAX(MG×Area×Months, RevShare%×NSV) + CAM</p></div>';
+  h+='<div class="pg-hd-right"><button class="btn primary" onclick="addSt(\''+k+'\')">+ Add Store</button></div></div>';
+
+  // Store pills
+  h+='<div class="store-bar">';
+  st.forEach(function(s,i){
+    h+='<span class="st'+(i===ai?' on':'')+'" onclick="selSt(\''+k+'\','+i+')">'+s.name;
+    h+='<span class="x" onclick="event.stopPropagation();rmSt(\''+k+'\','+i+')">×</span></span>';
+  });
+  if(!st.length) h+='<span style="color:var(--t3);font-size:12px">No stores added yet</span>';
+  h+='</div>';
+
+  if(!st.length) return h+'<div class="cd" style="text-align:center;padding:48px;color:var(--t3)"><div style="font-size:40px;margin-bottom:10px">'+CI[k]+'</div><p style="font-size:16px;font-family:var(--hd);margin-bottom:12px">No stores in '+CN[k]+' yet</p><button class="btn primary" onclick="addSt(\''+k+'\')">+ Add First Store</button></div>';
+
+  var s=st[ai]||st[0]; if(!s)return h;
+  var sc=r.stores[ai]?r.stores[ai].s:null;
+
+  // ── KPI Revenue Section ──
+  h+='<div class="cd amber-l"><h3>Year 1 Revenue KPIs <span class="badge" style="background:var(--amg);color:var(--am)">INPUT</span></h3>';
+  h+='<p style="color:var(--t3);font-size:12px;margin-bottom:12px">Daily Sales = Footfall × Conversion % × ATV. Year 2+ applies LFL growth to annualised revenue.</p>';
+  h+='<div class="fg">';
+  h+='<div class="fi"><label>Footfall (walk-ins/day)</label>'+mi("uST('"+k+"',"+ai+",'footfall',this.value)",s.footfall,false)+'</div>';
+  h+='<div class="fi"><label>Conversion %</label>'+mi("uSTpct('"+k+"',"+ai+",'conv',this.value)",s.conv*100,false)+'</div>';
+  h+='<div class="fi"><label>ATV — Avg Transaction Value (₹)</label>'+mi("uST('"+k+"',"+ai+",'atv',this.value)",s.atv,false)+'</div>';
+  h+='</div>';
+  var ds=(s.footfall||0)*(s.conv||0)*(s.atv||0);
+  var psfpd=(s.area&&ds)?(ds/(s.area||1)):0;
+  h+='<div class="kpi-row">';
+  h+='<div class="kpi-item"><div class="kpi-label">Daily Sales</div><div class="kpi-val">'+fRs(ds)+'</div><div class="kpi-sub">₹/day</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">PSFPD</div><div class="kpi-val">'+fRs(psfpd)+'</div><div class="kpi-sub">₹/sqft/day</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Annual Rev (12mo)</div><div class="kpi-val">'+fCr(ds*12*DPM/UNIT)+'</div><div class="kpi-sub">₹ Crores</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Monthly Sales</div><div class="kpi-val">'+fRs(ds*DPM)+'</div><div class="kpi-sub">₹/month</div></div>';
+  h+='</div></div>';
+
+  // ── Store Basics ──
+  h+='<div class="cd"><h3>Store & Opex Inputs <span class="badge" style="background:var(--amg);color:var(--am)">INPUT</span></h3>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:0"><div>';
+  var basics1=[['Area (sq ft)','area'],['Capex ₹/sqft','cpxPsf'],['MG Rate ₹/sqft/month','mgRate'],['CAM Rate ₹/sqft/month','camRate'],['Utilities ₹/sqft/month','utilities']];
+  var basics2=[['R&M ₹/sqft/month','rm'],['Housekeeping ₹/sqft/month','hk'],['Security ₹/sqft/month','security'],['Communication ₹/sqft/month','comm'],['Other Exp ₹/sqft/month','otherExp']];
+  basics1.forEach(function(b){h+='<div class="fi"><label>'+b[0]+'</label>'+mi("uST('"+k+"',"+ai+",'"+b[1]+"',this.value)",s[b[1]],false)+'</div>';});
+  h+='</div><div>';
+  basics2.forEach(function(b){h+='<div class="fi"><label>'+b[0]+'</label>'+mi("uST('"+k+"',"+ai+",'"+b[1]+"',this.value)",s[b[1]],false)+'</div>';});
+  h+='</div></div>';
+  // Computed opex snapshot
+  if(s.area){
+    var totalSqftOpex=((s.rm||0)+(s.hk||0)+(s.security||0)+(s.comm||0)+(s.otherExp||0)+(s.utilities||0))*(s.area||0)*12/UNIT;
+    var totalCpx=(s.cpxPsf||0)*(s.area||0)/UNIT;
+    h+='<div class="kpi-row" style="margin-top:12px">';
+    h+='<div class="kpi-item"><div class="kpi-label">Total Capex</div><div class="kpi-val">'+fCr(totalCpx)+'</div></div>';
+    h+='<div class="kpi-item"><div class="kpi-label">Annual Opex (excl. rent/staff)</div><div class="kpi-val">'+fCr(totalSqftOpex)+'</div></div>';
+    h+='<div class="kpi-item"><div class="kpi-label">MG Rent/year</div><div class="kpi-val">'+fCr((s.mgRate||0)*(s.area||0)*12/UNIT)+'</div></div>';
+    h+='</div>';
+  }
+  h+='</div>';
+
+  // ── Staff Table ──
+  h+='<div class="cd"><h3>Staff Breakdown <span class="badge" style="background:var(--amg);color:var(--am)">INPUT</span></h3>';
+  h+='<div class="tw"><table><thead><tr><th>Designation</th><th>Count</th><th>CTC (₹ Lakhs)</th><th>Annual Cost (₹ Cr)</th><th></th></tr></thead><tbody>';
+  var totalStaffCost=0;
+  (s.staff||[]).forEach(function(st2,si){
+    var cost=(st2.count||0)*(st2.ctcLakhs||0)*1e5/UNIT; totalStaffCost+=cost;
+    h+='<tr><td>'+miTxt("uStaff('"+k+"',"+ai+","+si+",'title',this.value)",(st2.title||''),'stx_'+k+'_'+ai+'_'+si)+'</td>';
+    h+='<td>'+mi("uStaff('"+k+"',"+ai+","+si+",'count',this.value)",st2.count,false)+'</td>';
+    h+='<td>'+mi("uStaff('"+k+"',"+ai+","+si+",'ctcLakhs',this.value)",st2.ctcLakhs,false)+'</td>';
+    h+='<td style="font-weight:700;color:var(--ac)">'+fCr(cost)+'</td>';
+    h+='<td><button class="btn ghost sm" onclick="rmStaffRow(\''+k+'\','+ai+','+si+')" title="Remove">✕</button></td></tr>';
+  });
+  h+='<tr class="tot"><td>Total Staff</td><td>'+(s.staff||[]).reduce(function(s2,x){return s2+(x.count||0);},0)+'</td><td></td><td>'+fCr(totalStaffCost)+'</td><td></td></tr>';
+  h+='</tbody></table></div>';
+  h+='<button class="btn ghost sm" style="margin-top:8px" onclick="addStaffRow(\''+k+'\','+ai+')">+ Add Designation</button></div>';
+
+  // ── Year-wise Inputs ──
+  var arrs=[['LFL Growth % (Yr2+)','lfl',true],['Operational Months','opM',false],
+    ['Deposit Months','depMonths',false],['Revenue Share %','revSharePct',true],
+    ['Consumables % NSV','consPct',true],['Bank Charges % NSV','bankChgPct',true],
+    ['Renovation Capex ₹/sqft','renCpxPsf',false]];
+  h+='<div class="cd"><h3>Year-wise Assumptions <span class="badge" style="background:var(--amg);color:var(--am)">INPUT</span></h3>';
+  var ahd=['Input'].concat(YR);
+  var arows=arrs.map(function(a){
+    var rr={Input:a[0]};
+    YR.forEach(function(y,i){rr[y]=mi("uSTA('"+k+"',"+ai+",'"+a[1]+"',"+i+",this.value,"+a[2]+")",s[a[1]][i],a[2]);});
+    return rr;
+  });
+  h+=tbl(ahd,arows)+'</div>';
+
+  // ── Store P&L Output ──
+  if(sc){
+    _chartData.ch={k:k,sc:sc};
+    h+='<div class="cd accent"><h3>'+s.name+' — P&L Output <span class="badge" style="background:var(--gg);color:var(--gn)">CALCULATED</span></h3>';
+
+    // Tabs
+    var tab=_tab[k]||'pl';
+    h+='<div class="tabs">';
+    h+='<div class="tab'+(tab==='pl'?' on':'')+'" onclick="setTab(\''+k+'\',\'pl\')">P&L Detail</div>';
+    h+='<div class="tab'+(tab==='chart'?' on':'')+'" onclick="setTab(\''+k+'\',\'chart\')">Charts</div>';
+    h+='</div>';
+
+    if(tab==='pl'){
+      var ohd=['Metric'].concat(YR).concat(['Total']);
+      var orows=[
+        {Metric:'PSFPD (₹)',_c:'dim'},{Metric:'Gross Revenue (MRP)',_c:'sub'},
+        {Metric:'NSV',_c:'tot'},{Metric:'COGS'},{Metric:'Gross Margin',_c:'tot'},
+        {Metric:'GM %',_c:'dim'},{Metric:'Staff Cost'},{Metric:'Rent (Total)'},
+        {Metric:'  └ MG Component',_c:'dim'},{Metric:'  └ RevShare Component',_c:'dim'},
+        {Metric:'  └ CAM',_c:'dim'},
+        {Metric:'Utilities'},{Metric:'Other Opex'},{Metric:'Marketing'},{Metric:'Corporate OH'},
+        {Metric:'EBITDA',_c:'tot'},{Metric:'EBITDA %',_c:'dim'},
+        {Metric:'Depreciation'},{Metric:'EBIT',_c:'tot'},
+        {Metric:'Capex',_c:'dim'},{Metric:'Security Deposit',_c:'dim'}
+      ];
+      var mp={'Gross Revenue (MRP)':sc.rv,'NSV':sc.nv,'COGS':sc.cg,'Gross Margin':sc.gm,
+        'Staff Cost':sc.sf,'Rent (Total)':sc.rn,'  └ MG Component':sc.mgComp,'  └ RevShare Component':sc.rsComp,'  └ CAM':sc.camComp,
+        'Utilities':sc.ut,'Other Opex':sc.ox,'Marketing':sc.mk,'Corporate OH':sc.co,
+        'EBITDA':sc.eb,'Depreciation':sc.dep,'EBIT':sc.ebit,'Capex':sc.cx,'Security Deposit':sc.sd};
+      orows.forEach(function(o){
+        if(o.Metric==='PSFPD (₹)'){YR.forEach(function(y,i){o[y]=fRs(sc.psfpd[i]);});o.Total='';return;}
+        if(o.Metric==='GM %'){YR.forEach(function(y,i){o[y]=sc.nv[i]?fp(sc.gm[i]/sc.nv[i]):'—';});o.Total='';return;}
+        if(o.Metric==='EBITDA %'){YR.forEach(function(y,i){o[y]=sc.nv[i]?fp(sc.eb[i]/sc.nv[i]):'—';});o.Total='';return;}
+        var a=mp[o.Metric];
+        if(a){YR.forEach(function(y,i){o[y]=fCr(a[i]);});o.Total=fCr(sm(a));}
+      });
+      h+=tbl(ohd,orows);
+    } else {
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+      h+='<div><p style="font-size:11px;color:var(--t3);margin-bottom:6px;font-weight:600">REVENUE & MARGIN</p><canvas id="ch-st-rv" class="chart" style="width:100%"></canvas></div>';
+      h+='<div><p style="font-size:11px;color:var(--t3);margin-bottom:6px;font-weight:600">COST WATERFALL (Yr1)</p><canvas id="ch-st-cost" class="chart" style="width:100%"></canvas></div>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+
+  // ── Channel Aggregate ──
+  if(st.length>1){
+    h+='<div class="cd green-l"><h3 style="color:var(--gn)">Channel Total — '+st.length+' Stores</h3>';
+    var trows=[rw2('NSV',r.nv,'tot'),rw2('EBITDA',r.eb,'tot'),{Metric:'EBITDA %',_c:'dim'}];
+    YR.forEach(function(y,i){trows[2][y]=r.nv[i]?fp(r.eb[i]/r.nv[i]):'—';});trows[2].Total='';
+    r.stores.forEach(function(sc2){trows.push(rw2('  └ '+sc2.name+' NSV',sc2.s.nv));});
+    h+=tbl(['Metric'].concat(YR).concat(['Total']),trows)+'</div>';
+  }
+  return h;
+}
+
+function drawChCharts(d){
+  if(!d||!d.sc)return;
+  var sc=d.sc;
+  drawChart('ch-st-rv','line',YR,
+    [{data:sc.nv,color:'#2a5a3c',fill:true},{data:sc.eb,color:'#1a7a42'},{data:sc.ebit,color:'#2d5494'}]);
+  // Cost bar Yr1
+  var yr1Labels=['COGS','Staff','Rent','Utils','Opex','Mktg','CorpOH'];
+  var yr1Data=[sc.cg[0],sc.sf[0],sc.rn[0],sc.ut[0],sc.ox[0],sc.mk[0],sc.co[0]];
+  var yr1Colors=['#a62626','#9a6c1a','#2d5494','#1a7a42','#7a756d','#2a5a3c','#4a4640'];
+  var yr1Ds=yr1Labels.map(function(l,i){return{data:yr1Labels.map(function(_,j){return j===i?yr1Data[i]:0;}),color:yr1Colors[i]};});
+  drawChart('ch-st-cost','bar',yr1Labels,yr1Ds,{h:200});
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: DETAILED P&L
+// ════════════════════════════════════════════════════
+function pgPL(c){
+  var T=c.T;
+  var h='<h2>Detailed P&L</h2><p class="subtitle">Consolidated across all channels — ₹ Crores — 10 Years</p>';
+  // EBITDA bridge Yr1 vs Yr5 vs Yr10
+  if(T.nv.some(function(v){return v>0;})){
+    h+='<div class="kpg">';
+    [[0,'Yr 1'],[4,'Yr 5'],[9,'Yr 10']].forEach(function(yd){
+      var y=yd[0], lbl=yd[1];
+      var ebm=T.nv[y]?T.eb[y]/T.nv[y]:0;
+      h+='<div class="kp '+(ebm>0.15?'g':ebm>0?'a':'r')+'"><div class="kl">EBITDA % — '+lbl+'</div><div class="kv">'+fp(ebm)+'</div><div class="ks">NSV: '+fCr(T.nv[y])+'</div></div>';
+    });
+    h+='<div class="kp b"><div class="kl">10-Yr Total NSV</div><div class="kv">'+fCr(sm(T.nv))+'</div></div>';
+    h+='<div class="kp"><div class="kl">10-Yr Total PAT</div><div class="kv">'+fCr(sm(T.pat))+'</div></div>';
+    h+='</div>';
+  }
+  // Compute weighted avg discount per year (across all channels) for display
+  var wtdDiscPerYr=zeros();
+  YR.forEach(function(y,i){wtdDiscPerYr[i]=c.T.rv[i]>0?c.T.disc[i]/c.T.rv[i]:0;});
+  var avgDisc10=sm(c.T.rv)>0?sm(c.T.disc)/sm(c.T.rv):0;
+
+  h+='<div class="cd">'+tbl(HD,[
+    rw('Gross Revenue (MRP)',T.rv,'sub'),
+    rw('(−) Discount — wtd avg '+fp(avgDisc10),T.disc.map(function(v){return -v;})),
+    rw('Gross Sales Value (GSV)',T.gsv,'sub'),
+    rw('Net Sales Value (NSV)',T.nv,'tot'),
+    rw('Cost of Goods Sold',T.cg),rw('Gross Margin',T.gm,'tot'),rp('Gross Margin %',T.gm,T.nv),
+    {P:'OPERATING EXPENSES',_c:'sec'},
+    rw('Rent (incl. CAM)',T.rn),rw('Staff Cost',T.sf),rw('Utilities',T.ut),
+    {P:'OTHER OPEX',_c:'sec'},
+    rw('  └ Repairs & Maintenance',T.oxRm,'dim'),
+    rw('  └ Housekeeping',T.oxHk,'dim'),
+    rw('  └ Security',T.oxSec,'dim'),
+    rw('  └ Communication',T.oxComm,'dim'),
+    rw('  └ Other Store Expenses',T.oxOth,'dim'),
+    rw('  └ Consumables',T.oxCons,'dim'),
+    rw('  └ Bank Charges',T.oxBank,'dim'),
+    rw('Other Opex (Total)',T.ox,'sub'),
+    rw('Marketing',T.mk),rw('Corporate Overheads',T.co),
+    rw('EBITDA',T.eb,'tot'),rp('EBITDA Margin %',T.eb,T.nv),
+    rw('Depreciation',T.dep),rw('EBIT',T.ebit,'tot'),rp('EBIT Margin %',T.ebit,T.nv),
+    rw('Tax ('+fp(S.taxRate[0])+')',T.tax),rw('Profit After Tax',T.pat,'tot'),rp('PAT Margin %',T.pat,T.nv)
+  ])+'</div>';
+  // Per-year weighted discount line
+  h+='<div class="cd" style="padding:14px 20px"><div style="font-size:11px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Weighted Avg Discount — by Year (sourced from Inventory Model)</div>';
+  var wdHd=['Metric'].concat(YR).concat(['10-Yr Avg']);
+  var wdRow={Metric:'Weighted Discount %'};
+  YR.forEach(function(y,i){wdRow[y]=fp(wtdDiscPerYr[i]);});
+  wdRow['10-Yr Avg']=fp(avgDisc10);
+  h+=tbl(wdHd,[wdRow])+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: CASH FLOW
+// ════════════════════════════════════════════════════
+function pgCF(c){
+  var T=c.T, CF=c.CF;
+  var h='<h2>Cash Flow Statement</h2><p class="subtitle">₹ Crores — 10 Years</p>';
+  // KPIs
+  var pb='Not achieved';
+  for(var y=0;y<NY;y++) if(CF.cum[y]>=0){pb='Year '+(y+1);break;}
+  var totalInv=-(Math.min.apply(null,CF.cum));
+  h+='<div class="kpg">';
+  h+='<div class="kp '+(CF.cum[NY-1]>0?'g':'r')+'"><div class="kl">Cumulative CF (Yr10)</div><div class="kv">'+fCr(CF.cum[NY-1])+'</div></div>';
+  h+='<div class="kp a"><div class="kl">Payback</div><div class="kv">'+pb+'</div></div>';
+  h+='<div class="kp r"><div class="kl">Peak Cash Outflow</div><div class="kv">'+fCr(totalInv)+'</div></div>';
+  h+='<div class="kp b"><div class="kl">Total Capex + Deposits</div><div class="kv">'+fCr(sm(T.cx)+sm(T.sd))+'</div></div>';
+  h+='</div>';
+  var hd=['P'].concat(YR);
+  function r2(l,a,cls){var rr={P:l,_c:cls||''};YR.forEach(function(y,i){rr[y]=fCr(a[i]);});return rr;}
+  h+='<div class="cd">'+tbl(hd,[
+    {P:'CASH FROM OPERATIONS',_c:'sec'},
+    r2('PAT',CF.pat),r2('(+) Depreciation',CF.dep),r2('(±) Working Capital Change',CF.wc),
+    r2('Net Cash from Operations (A)',CF.ocf,'tot'),
+    {P:'CASH FROM INVESTING',_c:'sec'},
+    r2('(-) Capex',T.cx.map(function(v){return -v;})),
+    r2('(-) Security Deposits',T.sd.map(function(v){return -v;})),
+    r2('Net Cash from Investing (B)',CF.icf,'tot'),
+    r2('Net Cash Flow (A+B)',CF.ncf,'tot'),
+    r2('Cumulative Cash Flow',CF.cum,'tot')
+  ])+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: EXECUTIVE SUMMARY
+// ════════════════════════════════════════════════════
+function pgES(c){
+  var T=c.T, CF=c.CF, irr=c.irr;
+  var has=T.nv.some(function(v){return v>0;});
+  var ok=has&&irr>=(S.wacc[0]||.12);
+  var totalSt=CK.reduce(function(s,k){return s+S.stores[k].length;},0);
+  var pk=has?Math.min.apply(null,CF.cum):0;
+  var pb='Not achieved'; if(has)for(var y=0;y<NY;y++)if(CF.cum[y]>=0){pb='Year '+(y+1);break;}
+
+  var h='<h2>Executive Summary</h2><p class="subtitle">'+S.name+' — 10-Year Business Plan</p>';
+  h+='<div class="ban '+(has?(ok?'go':'no'):'wt')+'">'+(has?(ok?'✅ RECOMMENDED — IRR '+fp(irr)+' exceeds WACC '+fp(S.wacc[0]):'❌ NOT RECOMMENDED — IRR '+fp(irr)+' below WACC '+fp(S.wacc[0])):'⏳ Awaiting input data')+'</div>';
+
+  h+='<div class="kpg">';
+  h+='<div class="kp"><div class="kl">NSV Year 5</div><div class="kv">'+fCr(T.nv[4])+'</div></div>';
+  h+='<div class="kp"><div class="kl">NSV Year 10</div><div class="kv">'+fCr(T.nv[9])+'</div></div>';
+  h+='<div class="kp g"><div class="kl">EBITDA % Yr5</div><div class="kv">'+(T.nv[4]?fp(T.eb[4]/T.nv[4]):'—')+'</div></div>';
+  h+='<div class="kp g"><div class="kl">EBITDA % Yr10</div><div class="kv">'+(T.nv[9]?fp(T.eb[9]/T.nv[9]):'—')+'</div></div>';
+  h+='<div class="kp b"><div class="kl">IRR</div><div class="kv">'+fp(irr)+'</div></div>';
+  h+='<div class="kp a"><div class="kl">NPV</div><div class="kv">'+fCr(c.npv)+'</div></div>';
+  h+='<div class="kp a"><div class="kl">Payback</div><div class="kv">'+pb+'</div></div>';
+  h+='<div class="kp r"><div class="kl">Peak Investment</div><div class="kv">'+fCr(pk)+'</div></div>';
+  h+='<div class="kp"><div class="kl">Total Capex</div><div class="kv">'+fCr(sm(T.cx))+'</div></div>';
+  h+='<div class="kp"><div class="kl">Total Stores</div><div class="kv">'+totalSt+'</div></div>';
+  h+='</div>';
+
+  // Channel breakdown
+  h+='<div class="cd"><h3>Channel Revenue Split</h3>';
+  var chHd=['Channel','Stores'].concat(YR).concat(['10-Yr Total','EBITDA% Yr10']);
+  var chR=CK.map(function(k){
+    var rr={Channel:CI[k]+' '+CN[k],Stores:S.stores[k].length||'—'};
+    YR.forEach(function(y,i){rr[y]=fCr(c.R[k].nv[i]);});
+    rr['10-Yr Total']=fCr(sm(c.R[k].nv));
+    rr['EBITDA% Yr10']=c.R[k].nv[9]?fp(c.R[k].eb[9]/c.R[k].nv[9]):'—';
+    return rr;
+  });
+  var tot={Channel:'<strong>TOTAL</strong>',_c:'tot',Stores:totalSt,'10-Yr Total':fCr(sm(T.nv)),'EBITDA% Yr10':T.nv[9]?fp(T.eb[9]/T.nv[9]):'—'};
+  YR.forEach(function(y,i){tot[y]=fCr(T.nv[i]);});
+  chR.push(tot);
+  h+=tbl(chHd,chR)+'</div>';
+
+  h+='<div class="cd"><h3>Key Financials Summary</h3>'+tbl(HD,[
+    rw('NSV',T.nv,'tot'),rw('Gross Margin',T.gm,'sub'),rp('GM%',T.gm,T.nv),
+    rw('EBITDA',T.eb,'tot'),rp('EBITDA%',T.eb,T.nv),rw('EBIT',T.ebit),rw('PAT',T.pat),
+    rw('Capex',T.cx),rw('Security Deposits',T.sd),rw('Net Cash Flow',CF.ncf),rw('Cumulative CF',CF.cum,'tot')
+  ])+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: CHANNEL P&L
+// ════════════════════════════════════════════════════
+function pgChPL(c){
+  var h='<h2>Channel-wise P&L</h2><p class="subtitle">Individual channel performance — ₹ Crores</p>';
+  CK.forEach(function(k){
+    var r=c.R[k], col=CL[k];
+    h+='<div class="cd" style="border-left:4px solid '+col+'"><h3>'+CI[k]+' '+CN[k]+' ('+S.stores[k].length+' stores)</h3>';
+    var orows=[rw2('NSV',r.nv,'tot'),rw2('Gross Margin',r.gm,'sub'),
+      {Metric:'GM %',_c:'dim'},{Metric:''},
+      rw2('Rent',r.rn),rw2('Staff',r.sf),rw2('Utilities',r.ut),rw2('Other Opex',r.ox),
+      rw2('Marketing',r.mk),rw2('Corp OH',r.co),
+      rw2('EBITDA',r.eb,'tot'),{Metric:'EBITDA %',_c:'dim'}];
+    YR.forEach(function(y,i){
+      orows[2][y]=r.nv[i]?fp(r.gm[i]/r.nv[i]):'—'; orows[2].Total='';
+      orows[11][y]=r.nv[i]?fp(r.eb[i]/r.nv[i]):'—'; orows[11].Total='';
+    });
+    r.stores.forEach(function(sc){orows.push(rw2('  └ '+sc.name+' NSV',sc.s.nv));});
+    h+=tbl(['Metric'].concat(YR).concat(['Total']),orows)+'</div>';
+  });
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: CONSOLIDATION
+// ════════════════════════════════════════════════════
+function pgCon(c){
+  var h='<h2>Consolidation</h2><p class="subtitle">Line-item YoY across all channels — ₹ Crores</p>';
+  var metrics=[['NSV','nv'],['Gross Margin','gm'],['Rent','rn'],['Staff Cost','sf'],
+    ['Marketing','mk'],['Other Opex','ox'],['Corp OH','co'],['EBITDA','eb'],['Capex','cx'],['Deposits','sd']];
+  var hd=['Item','Channel'].concat(YR); var rows=[];
+  metrics.forEach(function(m){
+    CK.forEach(function(k){
+      var rr={Item:m[0],Channel:CI[k]+' '+CN[k]};
+      YR.forEach(function(y,i){rr[y]=fCr(c.R[k][m[1]][i]);});
+      rows.push(rr);
+    });
+    var tot={Item:'<strong>'+m[0]+'</strong>',Channel:'TOTAL',_c:'tot'};
+    YR.forEach(function(y,i){tot[y]=fCr(CK.reduce(function(s,k){return s+c.R[k][m[1]][i];},0));});
+    rows.push(tot);
+  });
+  h+='<div class="cd">'+tbl(hd,rows)+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: STORE ROLLOUT PLAN
+// Shows each store: channel, name, opening month/year, area, opM schedule
+// ════════════════════════════════════════════════════
+function pgRollout(){
+  var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var h='<h2>Store Rollout Plan</h2><p class="subtitle">When each store opens, operating months per year, area & key KPIs — across all channels</p>';
+
+  // Summary KPI bar: total stores, stores per year
+  var totalSt=CK.reduce(function(s,k){return s+S.stores[k].length;},0);
+  if(!totalSt){
+    return h+'<div class="cd" style="text-align:center;padding:40px;color:var(--t3)"><div style="font-size:36px;margin-bottom:10px">🏪</div><p style="font-size:15px;font-family:var(--hd)">No stores added yet</p><p style="font-size:12px;margin-top:4px">Add stores to channels to see the rollout plan</p></div>';
+  }
+
+  // Count stores opening per year (opM[0]>0 OR first year where opM>0 after prior zeros)
+  var storesPerYear=zeros();
+  CK.forEach(function(k){
+    S.stores[k].forEach(function(st){
+      for(var y=0;y<NY;y++){
+        var isOpening=(y===0&&(st.opM[y]||0)>0)||
+                      (y>0&&(st.opM[y]||0)>0&&(st.opM[y-1]||0)===0);
+        if(isOpening){storesPerYear[y]++;break;}
+      }
+    });
+  });
+
+  h+='<div class="kpg">';
+  h+='<div class="kp"><div class="kl">Total Stores Planned</div><div class="kv">'+totalSt+'</div></div>';
+  for(var y=0;y<NY;y++){
+    if(storesPerYear[y]>0){
+      h+='<div class="kp b"><div class="kl">New in Yr'+(y+1)+'</div><div class="kv">'+storesPerYear[y]+'</div></div>';
+    }
+  }
+  h+='</div>';
+
+  // Main rollout grid table
+  // Columns: Channel | Store | Area | Opening (Month Yr) | OpMonths per year Yr1-Yr10
+  var hd=['Channel','Store Name','Area (sqft)','Opens In'].concat(YR.map(function(y){return y+' opM';})).concat(['PSFPD (₹)','Daily Sales']);
+  var rows=[];
+  CK.forEach(function(k){
+    if(!S.stores[k].length) return;
+    S.stores[k].forEach(function(st,si){
+      // Find opening year and month
+      var openYr=-1,openMonth=0;
+      for(var y=0;y<NY;y++){
+        if((st.opM[y]||0)>0){
+          openYr=y;
+          // Opening month = 12 - opM[y] + 1 (first operating month in that year)
+          // e.g. opM=6 means opened in month 7 (July) of that year
+          openMonth=13-(st.opM[y]||12);
+          if(openMonth<1)openMonth=1;
+          if(openMonth>12)openMonth=1;
+          break;
+        }
+      }
+      var openLabel=openYr>=0?(MONTHS[openMonth-1]+' (Yr'+(openYr+1)+')'):'Not scheduled';
+      var ds=(st.footfall||0)*(st.conv||0)*(st.atv||0);
+      var psfpd=(st.area&&ds)?(ds/st.area):0;
+      var r={
+        Channel:'<span style="color:'+CL[k]+'">●</span> '+CN[k],
+        'Store Name':st.name,
+        'Area (sqft)':st.area?st.area.toLocaleString('en-IN'):'—',
+        'Opens In':openLabel
+      };
+      YR.forEach(function(yr,i){
+        var m=st.opM[i]||0;
+        r[yr+' opM']=m?m:'—';
+      });
+      r['PSFPD (₹)']=psfpd?fRs(psfpd):'—';
+      r['Daily Sales']=ds?fRs(ds):'—';
+      rows.push(r);
+    });
+  });
+  h+='<div class="cd"><h3>Detailed Rollout Schedule</h3>'+tbl(hd,rows)+'</div>';
+
+  // Year-wise opening calendar view
+  h+='<div class="cd"><h3>Year-wise Opening Calendar</h3>';
+  for(var y=0;y<NY;y++){
+    var opening=[];
+    CK.forEach(function(k){
+      S.stores[k].forEach(function(st){
+        var isOpening=(y===0&&(st.opM[y]||0)>0)||
+                      (y>0&&(st.opM[y]||0)>0&&(st.opM[y-1]||0)===0);
+        if(isOpening){
+          var m=13-(st.opM[y]||12); if(m<1)m=1; if(m>12)m=12;
+          opening.push({k:k,name:st.name,month:m,opM:st.opM[y],area:st.area});
+        }
+      });
+    });
+    if(!opening.length) continue;
+    h+='<div style="margin-bottom:16px">';
+    h+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:8px">Year '+(y+1)+'</div>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:8px">';
+    opening.forEach(function(op){
+      h+='<div style="background:var(--s1);border:1.5px solid '+CL[op.k]+';border-radius:8px;padding:10px 14px;min-width:160px">';
+      h+='<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:'+CL[op.k]+';margin-bottom:4px">'+CN[op.k]+'</div>';
+      h+='<div style="font-weight:700;font-size:13px;color:var(--tx);margin-bottom:3px">'+op.name+'</div>';
+      h+='<div style="font-size:11px;color:var(--t3)">Opens: <strong style="color:var(--tx)">'+MONTHS[op.month-1]+', Yr'+(y+1)+'</strong></div>';
+      h+='<div style="font-size:11px;color:var(--t3)">Ops: <strong>'+op.opM+' months</strong>'+(op.area?' · <strong>'+op.area.toLocaleString('en-IN')+'</strong> sqft':'')+'</div>';
+      h+='</div>';
+    });
+    h+='</div></div>';
+  }
+  h+='</div>';
+
+  // Cumulative store count by year
+  h+='<div class="cd"><h3>Cumulative Store Count</h3>';
+  var cumHd=['Channel'].concat(YR);
+  var cumRows=CK.map(function(k){
+    var r={Channel:CI[k]+' '+CN[k]};
+    var cum=0;
+    YR.forEach(function(yr,i){
+      S.stores[k].forEach(function(st){
+        var isOpening=(i===0&&(st.opM[i]||0)>0)||
+                      (i>0&&(st.opM[i]||0)>0&&(st.opM[i-1]||0)===0);
+        if(isOpening) cum++;
+      });
+      r[yr]=cum||'—';
+    });
+    return r;
+  });
+  var totCumRow={Channel:'<strong>TOTAL</strong>',_c:'tot'};
+  var runTotal=Array(NY).fill(0);
+  CK.forEach(function(k){
+    var cum=0;
+    for(var i=0;i<NY;i++){
+      S.stores[k].forEach(function(st){
+        var isOpening=(i===0&&(st.opM[i]||0)>0)||(i>0&&(st.opM[i]||0)>0&&(st.opM[i-1]||0)===0);
+        if(isOpening) cum++;
+      });
+      runTotal[i]+=cum;
+    }
+  });
+  YR.forEach(function(yr,i){totCumRow[yr]=runTotal[i]||'—';});
+  cumRows.push(totCumRow);
+  h+=tbl(cumHd,cumRows)+'</div>';
+  return h;
+}
+
+// ════════════════════════════════════════════════════
+// PAGE: COMPARE PLANS
+// Side-by-side KPI comparison of all saved plans
+// ════════════════════════════════════════════════════
+function pgCompare(){
+  var saves=getSaves();
+  var h='<h2>Compare Plans</h2><p class="subtitle">Side-by-side comparison of all saved plan snapshots</p>';
+
+  if(saves.length<2){
+    return h+'<div class="cd" style="text-align:center;padding:40px;color:var(--t3)">'+
+      '<div style="font-size:36px;margin-bottom:10px">⚖</div>'+
+      '<p style="font-size:15px;font-family:var(--hd)">Need at least 2 saved plans to compare</p>'+
+      '<p style="font-size:12px;margin-top:6px">Currently '+saves.length+' plan(s) saved. Save more variants to compare them here.</p>'+
+      '<button class="btn amber" style="margin-top:16px" onclick="go(\'saves\')">Go to Saved Plans</button></div>';
+  }
+
+  // Build comparison table: rows = metrics, cols = plans
+  var metrics=[
+    {l:'IRR',f:function(m){return m.irr?fp(m.irr):'—';}},
+    {l:'NSV Year 10',f:function(m){return m.nsv10?fCr(m.nsv10):'—';}},
+    {l:'EBITDA % Yr10',f:function(m){return (m.ebitda10&&m.nsv10)?fp(m.ebitda10/m.nsv10):'—';}},
+    {l:'Total Stores',f:function(m){return m.stores!=null?m.stores:'—';}}
+  ];
+
+  // Header: Plan names
+  var hd=['Metric'].concat(saves.map(function(s){return s.name;}));
+  var rows=metrics.map(function(m){
+    var r={Metric:m.l};
+    saves.forEach(function(s){r[s.name]=m.f(s.meta||{});});
+    return r;
+  });
+
+  // Highlight best IRR
+  var bestIRR=-Infinity, bestIdx=-1;
+  saves.forEach(function(s,i){if((s.meta||{}).irr>bestIRR){bestIRR=s.meta.irr;bestIdx=i;}});
+
+  h+='<div class="cd"><h3>Key Metrics Comparison</h3>';
+  // Build a custom table with best-value highlighting
+  h+='<div class="tw"><table><thead><tr><th>Metric</th>';
+  saves.forEach(function(s,i){
+    h+='<th style="'+(i===bestIdx?'color:var(--gn);background:var(--gg)':'')+'">'+s.name+'</th>';
+  });
+  h+='</tr></thead><tbody>';
+  metrics.forEach(function(m){
+    h+='<tr><td>'+m.l+'</td>';
+    saves.forEach(function(s,i){
+      var val=m.f(s.meta||{});
+      h+='<td style="'+(i===bestIdx?'font-weight:700;color:var(--gn)':'')+'">'+val+'</td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table></div></div>';
+
+  // Date and store count details
+  h+='<div class="cd"><h3>Plan Details</h3>';
+  h+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">';
+  saves.forEach(function(s,i){
+    var d=new Date(s.date);
+    var m=s.meta||{};
+    var isBest=i===bestIdx;
+    h+='<div style="border:1.5px solid '+(isBest?'var(--gn)':'var(--bd)')+';border-radius:8px;padding:14px;background:'+(isBest?'var(--gg)':'var(--s1)')+';">';
+    h+='<div style="font-weight:700;font-size:13px;font-family:var(--hd);margin-bottom:6px;color:'+(isBest?'var(--gn)':'var(--tx)')+'">'+s.name+(isBest?' ★':'')+'</div>';
+    h+='<div style="font-size:11px;color:var(--t3);margin-bottom:8px">Saved: '+d.toLocaleDateString('en-IN')+'</div>';
+    h+='<div style="display:flex;flex-direction:column;gap:4px">';
+    if(m.irr) h+='<div style="font-size:11.5px"><span style="color:var(--t4)">IRR:</span> <strong>'+fp(m.irr)+'</strong></div>';
+    if(m.nsv10) h+='<div style="font-size:11.5px"><span style="color:var(--t4)">NSV Yr10:</span> <strong>'+fCr(m.nsv10)+'</strong></div>';
+    if(m.ebitda10&&m.nsv10) h+='<div style="font-size:11.5px"><span style="color:var(--t4)">EBITDA%:</span> <strong>'+fp(m.ebitda10/m.nsv10)+'</strong></div>';
+    if(m.stores!=null) h+='<div style="font-size:11.5px"><span style="color:var(--t4)">Stores:</span> <strong>'+m.stores+'</strong></div>';
+    h+='</div>';
+    h+='<button class="btn primary sm" style="margin-top:10px;width:100%" onclick="loadPlan('+i+')">Load This Plan</button>';
+    h+='</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+
+// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+// PAGE: INVENTORY MODEL (tabbed)
+// ════════════════════════════════════════════════════
+function pgInventory(c){
+  var inv=S.inv;
+  var h='<h2>Inventory Model</h2><p class="subtitle">Season-based inventory planning tied to channel revenue · Cost basis: FOB × (1+Duty&Freight) + Purchase Royalty · Excludes sales royalty</p>';
+
+  // ── Cost composition explainer (always visible) ──
+  h+='<div class="cd accent"><h3>Cost Composition — How Unit Cost is Built</h3>';
+  h+='<p style="font-size:12px;color:var(--t3);margin-bottom:12px">Inventory cost per ₹ of MRP uses only <strong>inventory-basis</strong> costs. Sales royalty (sales-linked), shrink, and supply-chain cost sit in the P&L separately. <strong>Discount</strong> shown is Year-1 weighted avg from seasonal discount grid below.</p>';
+  var ccHd=['Channel','FOB %','Duty&Frt %','Purchase Roy %','Unit Cost (% MRP)','Yr1 Wtd Disc','NSV/MRP','Cost per ₹ NSV'];
+  var ccRows=CK.map(function(k){
+    var cs=S.cs[k];
+    var ucr=(cs.fob||0)*(1+(cs.duty||0))+(cs.royalty||0);
+    var wd=wtdDiscYear(k,0);
+    var nsvMRP=(1-(cs.partnerM||0))*(1-(cs.gst||0))*(1-wd);
+    var cpn=nsvMRP>0.01?(ucr/nsvMRP):0;
+    return{
+      Channel:CI[k]+' '+CN[k],
+      'FOB %':fp(cs.fob),
+      'Duty&Frt %':fp(cs.duty),
+      'Purchase Roy %':fp(cs.royalty),
+      'Unit Cost (% MRP)':fp(ucr),
+      'Yr1 Wtd Disc':fp(wd),
+      'NSV/MRP':fp(nsvMRP),
+      'Cost per ₹ NSV':fp(cpn)
+    };
+  });
+  h+=tbl(ccHd,ccRows)+'</div>';
+
+  // ── Global assumptions ──
+  h+='<div class="cd amber-l"><h3>Global Inventory Assumptions</h3>';
+  h+='<div class="fg">';
+  h+='<div class="fi"><label>Seasons per Year</label><select class="inp" onchange="uInvSPY(this.value)"><option value="2"'+(inv.seasonsPerYear===2?' selected':'')+'>2 (SS, AW)</option><option value="4"'+(inv.seasonsPerYear===4?' selected':'')+'>4 (Quarterly)</option></select></div>';
+  h+='<div class="fi"><label>Season Life (N)</label>'+mi("uInv(\'seasonLife\',this.value,false)",inv.seasonLife,false)+'</div>';
+  h+='<div class="fi"><label>Devaluation % on Terminal Stock</label>'+mi("uInv(\'devalRate\',this.value,true)",inv.devalRate,true)+'</div>';
+  h+='<div class="fi"><label>Cover Ratio %</label>'+mi("uInv(\'coverRatio\',this.value,true)",inv.coverRatio,true)+'</div>';
+  h+='<div class="fi"><label>Minimum Buy ₹ Cr / Season (MOQ)</label>'+mi("uInv(\'minBuyPerSeason\',this.value,false)",inv.minBuyPerSeason,false)+'</div>';
+  h+='</div>';
+  // Season split
+  h+='<div style="margin-top:10px;padding:10px 12px;background:var(--s2);border-radius:6px">';
+  h+='<div style="font-size:11px;color:var(--t3);font-weight:600;margin-bottom:6px">Seasonal Revenue Split (must sum to 100%)</div>';
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">';
+  inv.seasonSplit.forEach(function(v,i){
+    var sLabel=inv.seasonsPerYear===2?(i===0?'SS (Apr–Sep)':'AW (Oct–Mar)'):'Q'+(i+1);
+    h+='<div class="fi" style="padding:4px 8px"><label>'+sLabel+' %</label>'+mi("uInvSplit("+i+",this.value)",v,true)+'</div>';
+  });
+  var splitSum=inv.seasonSplit.reduce(function(a,v){return a+v;},0);
+  h+='<span style="font-size:11px;color:'+(Math.abs(splitSum-1)>0.005?'var(--rd)':'var(--gn)')+';font-family:var(--m);padding:6px 10px;font-weight:700">Σ '+fp(splitSum)+'</span>';
+  h+='</div></div></div>';
+
+  // ── Per-channel sell-through & RTV settings ──
+  h+='<div class="cd"><h3>Channel-wise Sell-through & RTV Settings</h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">Sell-through is % of <strong>original buy</strong> that sells in each season of cohort life. Cumulative sell-through below 100% means residual goes to terminal devaluation after '+inv.seasonLife+' seasons.</p>';
+  var csHd=['Channel','Sell S0','S1','S2','S3','S4','Cum %','RTV Return %','RTV Swap %','RTV Freight %'];
+  var csRows=CK.map(function(k){
+    var ch=inv.chSettings[k];
+    var cum=ch.sellThru.reduce(function(a,v){return a+(v||0);},0);
+    var r={Channel:CI[k]+' '+CN[k]};
+    r['Sell S0']=mi("uInvChST(\'"+k+"\',0,this.value)",ch.sellThru[0],true);
+    r.S1=mi("uInvChST(\'"+k+"\',1,this.value)",ch.sellThru[1],true);
+    r.S2=mi("uInvChST(\'"+k+"\',2,this.value)",ch.sellThru[2],true);
+    r.S3=mi("uInvChST(\'"+k+"\',3,this.value)",ch.sellThru[3],true);
+    r.S4=mi("uInvChST(\'"+k+"\',4,this.value)",ch.sellThru[4],true);
+    r['Cum %']='<span style="font-family:var(--m);font-weight:700;color:'+(cum>=0.95?'var(--gn)':cum>=0.80?'var(--am)':'var(--rd)')+'">'+fp(cum)+'</span>';
+    r['RTV Return %']=mi("uInvCh(\'"+k+"\',\'rtvReturnPct\',this.value,true)",ch.rtvReturnPct,true);
+    r['RTV Swap %']=mi("uInvCh(\'"+k+"\',\'rtvSwapPct\',this.value,true)",ch.rtvSwapPct,true);
+    r['RTV Freight %']=mi("uInvCh(\'"+k+"\',\'rtvFreightRate\',this.value,true)",ch.rtvFreightRate,true);
+    return r;
+  });
+  h+=tbl(csHd,csRows)+'</div>';
+
+  // ── Seasonal Discount grid ──
+  var NS=10*inv.seasonsPerYear;
+  var sLabels=[];
+  for(var _y=0;_y<10;_y++) for(var _s=0;_s<inv.seasonsPerYear;_s++){
+    sLabels.push('Y'+(_y+1)+(inv.seasonsPerYear===2?(_s===0?'SS':'AW'):'Q'+(_s+1)));
+  }
+  h+='<div class="cd amber-l"><h3>Seasonal Discount by Channel <span class="badge" style="background:var(--amg);color:var(--am)">P&L LINK</span></h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">Set discount % per season per channel. <strong>Weighted average</strong> flows into the P&L as a deduction from Gross Revenue. Use "Set All" to apply a flat rate across all seasons. First column stays frozen while you scroll.</p>';
+  var dHd=['Channel','Set All','Yr1 Wtd','Yr10 Wtd','10yr Avg'].concat(sLabels);
+  var dRows=CK.map(function(k){
+    var ch=inv.chSettings[k];
+    var r={Channel:CI[k]+' '+CN[k]};
+    r['Set All']='<input class="inp" type="number" step="any" placeholder="Flat %" onchange="uInvChDAll(\''+k+'\',this.value)" style="width:70px">';
+    r['Yr1 Wtd']='<span style="font-family:var(--m);font-weight:700;color:var(--ac)">'+fp(wtdDiscYear(k,0))+'</span>';
+    r['Yr10 Wtd']='<span style="font-family:var(--m);font-weight:700;color:var(--ac)">'+fp(wtdDiscYear(k,9))+'</span>';
+    // 10yr avg discount — simple mean across seasons
+    var total=0;
+    for(var i=0;i<NS;i++) total+=(ch.discountBySeason[i]||0);
+    r['10yr Avg']='<span style="font-family:var(--m);font-weight:700;color:var(--ac)">'+fp(NS>0?total/NS:0)+'</span>';
+    sLabels.forEach(function(sl,i){
+      r[sl]=mi("uInvChDS(\'"+k+"\',"+i+",this.value)",ch.discountBySeason[i]||0,true);
+    });
+    return r;
+  });
+  // Add weighted-avg-across-channels footer row (if any channel has revenue)
+  var hasRev=CK.some(function(k){return c.R[k].rv.some(function(v){return v>0;});});
+  if(hasRev){
+    var wtdRow={Channel:'<strong>Wtd avg (across ch)</strong>',_c:'tot','Set All':'','Yr1 Wtd':'','Yr10 Wtd':'','10yr Avg':''};
+    sLabels.forEach(function(sl,i){
+      wtdRow[sl]=fp(wtdDiscSeasonAll(i,c.R));
+    });
+    dRows.push(wtdRow);
+  }
+  h+=tbl(dHd,dRows)+'</div>';
+
+  // ── Stock Floors (Min Store + Safety Warehouse) ──
+  h+='<div class="cd blue-l"><h3>Stock Floors — Min Store Stock + Safety Warehouse <span class="badge" style="background:var(--blg);color:var(--bl)">BUY DRIVER</span></h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">Both floors are <strong>days of sales cover</strong>. They add to cohort-driven buys when floor grows (demand ramps up). Online channels typically have zero store stock but larger warehouse coverage.</p>';
+  var sfHd=['Channel','Min Store Stock (days)','Safety Warehouse (days)','Total Floor (days)','Yr1 Floor Value','Yr10 Floor Value'];
+  var sfRows=CK.map(function(k){
+    var ch=inv.chSettings[k], cs=S.cs[k];
+    var total=(ch.minStoreStockDays||0)+(ch.safetyWarehouseDays||0);
+    // Compute floor value at cost for Y1 and Y10
+    var ucr=(cs.fob||0)*(1+(cs.duty||0))+(cs.royalty||0);
+    var seasonDays=365/inv.seasonsPerYear;
+    var y1SeasonRv=(c.R[k].rv[0]||0)*(inv.seasonSplit[0]||0.5);
+    var y10SeasonRv=(c.R[k].rv[9]||0)*(inv.seasonSplit[0]||0.5);
+    var y1Demand=y1SeasonRv*ucr;
+    var y10Demand=y10SeasonRv*ucr;
+    var y1Floor=y1Demand*(total/seasonDays);
+    var y10Floor=y10Demand*(total/seasonDays);
+    return{
+      Channel:CI[k]+' '+CN[k],
+      'Min Store Stock (days)':mi("uInvChFloor(\'"+k+"\',\'minStoreStockDays\',this.value)",ch.minStoreStockDays,false),
+      'Safety Warehouse (days)':mi("uInvChFloor(\'"+k+"\',\'safetyWarehouseDays\',this.value)",ch.safetyWarehouseDays,false),
+      'Total Floor (days)':'<span style="font-family:var(--m);font-weight:700;color:var(--bl)">'+total+'</span>',
+      'Yr1 Floor Value':fCr(y1Floor),
+      'Yr10 Floor Value':fCr(y10Floor)
+    };
+  });
+  h+=tbl(sfHd,sfRows)+'</div>';
+
+  // ── Compute inventory for all channels that have revenue ──
+  var invResults={};
+  CK.forEach(function(k){
+    if(c.R[k].nv.some(function(v){return v>0;})){
+      invResults[k]=calcInventory(k,c.R[k]);
+    }
+  });
+
+  // ── Channel selector (shared across tabs) ──
+  var active=invResults[_aCh]?_aCh:Object.keys(invResults)[0]||'ebo';
+  h+='<div class="cd" style="padding:14px 20px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">';
+  h+='<span style="font-size:11px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:1px">Channel:</span>';
+  CK.forEach(function(k){
+    var hasData=!!invResults[k];
+    var style=!hasData?'opacity:.4;cursor:not-allowed':'';
+    h+='<span class="st'+(k===active?' on':'')+'" style="'+style+'" onclick="'+(hasData?"selInvCh(\'"+k+"\')":'')+'">'+CI[k]+' '+CN[k]+(hasData?'':' (no rev)')+'</span>';
+  });
+  h+='</div></div>';
+
+  // ── Tabs ──
+  h+='<div class="tabs">';
+  h+='<div class="tab'+(_invTab==='setup'?' on':'')+'" onclick="setInvTab(\'setup\')">📊 Setup & Impact</div>';
+  h+='<div class="tab'+(_invTab==='movement'?' on':'')+'" onclick="setInvTab(\'movement\')">📦 Inventory Movement</div>';
+  h+='</div>';
+
+  if(!invResults[active]){
+    h+='<div class="cd" style="text-align:center;padding:36px;color:var(--t3)">No channel has revenue data. Add stores and fill KPIs first.</div>';
+    return h;
+  }
+
+  // Split content by tab
+  if(_invTab==='setup'){
+    h+=renderInvSetupTab(c,invResults,active);
+  } else {
+    h+=renderInvMovementTab(c,invResults,active,inv);
+  }
+  return h;
+}
+
+// ── TAB: Setup & Impact ──
+function renderInvSetupTab(c,invResults,active){
+  var ir=invResults[active];
+  var inv=S.inv;
+  var h='';
+
+  // KPIs
+  var totBuys=sm(ir.annual.buys), totCohort=sm(ir.annual.cohortBuys), totFloor=sm(ir.annual.floorBuy);
+  var totSales=sm(ir.annual.sales);
+  var totDeval=sm(ir.annual.deval), totRTVFrt=sm(ir.annual.rtvFreight);
+  var totRTVDuty=sm(ir.annual.rtvDutyLoss), totRTVRet=sm(ir.annual.rtvReturn);
+  var finalClosing=ir.annual.closing[9];
+  var finalFloor=ir.annual.floorStock[9];
+  var peakClosing=Math.max.apply(null,ir.annual.closing);
+
+  h+='<div class="cd"><h3>'+CI[active]+' '+CN[active]+' — Key Metrics</h3>';
+  h+='<div class="kpi-row">';
+  h+='<div class="kpi-item"><div class="kpi-label">10-Yr Total Buys</div><div class="kpi-val">'+fCr(totBuys)+'</div><div class="kpi-sub">Cohort '+fCr(totCohort)+' + Floor '+fCr(totFloor)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">10-Yr Sales @ Cost</div><div class="kpi-val">'+fCr(totSales)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">RTV Returned</div><div class="kpi-val">'+fCr(totRTVRet)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Terminal Devaluation</div><div class="kpi-val" style="color:var(--rd)">'+fCr(totDeval)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">RTV Freight (opex)</div><div class="kpi-val" style="color:var(--rd)">'+fCr(totRTVFrt)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">RTV Duty Loss</div><div class="kpi-val" style="color:var(--rd)">'+fCr(totRTVDuty)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Peak Inventory</div><div class="kpi-val">'+fCr(peakClosing)+'</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Yr 10 Floor Stock</div><div class="kpi-val">'+fCr(finalFloor)+'</div><div class="kpi-sub">safety reserve</div></div>';
+  h+='<div class="kpi-item"><div class="kpi-label">Yr 10 Total Closing</div><div class="kpi-val">'+fCr(finalClosing)+'</div></div>';
+  h+='</div></div>';
+
+  // Offline/Online split
+  h+='<div class="cd blue-l"><h3>Offline vs Online Channel Split</h3>';
+  var buckets={offline:{buys:0,sales:0,deval:0,rtvFrt:0,rtvDuty:0,closing:0,channels:[]},
+               online:{buys:0,sales:0,deval:0,rtvFrt:0,rtvDuty:0,closing:0,channels:[]}};
+  CK.forEach(function(k){
+    if(!invResults[k]) return;
+    var bkt=S.inv.channelType[k]||'offline';
+    var ann=invResults[k].annual;
+    buckets[bkt].buys+=sm(ann.buys);
+    buckets[bkt].sales+=sm(ann.sales);
+    buckets[bkt].deval+=sm(ann.deval);
+    buckets[bkt].rtvFrt+=sm(ann.rtvFreight);
+    buckets[bkt].rtvDuty+=sm(ann.rtvDutyLoss);
+    buckets[bkt].closing+=ann.closing[9];
+    buckets[bkt].channels.push(CN[k]);
+  });
+  var bHd=['Metric','🏬 Offline','🛒 Online','Total'];
+  var bRows=[
+    {Metric:'Channels included',_c:'dim','🏬 Offline':buckets.offline.channels.join(', ')||'—','🛒 Online':buckets.online.channels.join(', ')||'—','Total':''},
+    {Metric:'10-Yr Buys','🏬 Offline':fCr(buckets.offline.buys),'🛒 Online':fCr(buckets.online.buys),Total:fCr(buckets.offline.buys+buckets.online.buys),_c:'sub'},
+    {Metric:'10-Yr Sales @ Cost','🏬 Offline':fCr(buckets.offline.sales),'🛒 Online':fCr(buckets.online.sales),Total:fCr(buckets.offline.sales+buckets.online.sales)},
+    {Metric:'Devaluation','🏬 Offline':fCr(buckets.offline.deval),'🛒 Online':fCr(buckets.online.deval),Total:fCr(buckets.offline.deval+buckets.online.deval)},
+    {Metric:'RTV Freight','🏬 Offline':fCr(buckets.offline.rtvFrt),'🛒 Online':fCr(buckets.online.rtvFrt),Total:fCr(buckets.offline.rtvFrt+buckets.online.rtvFrt)},
+    {Metric:'RTV Duty Loss','🏬 Offline':fCr(buckets.offline.rtvDuty),'🛒 Online':fCr(buckets.online.rtvDuty),Total:fCr(buckets.offline.rtvDuty+buckets.online.rtvDuty)},
+    {Metric:'Year 10 Closing Inventory','🏬 Offline':fCr(buckets.offline.closing),'🛒 Online':fCr(buckets.online.closing),Total:fCr(buckets.offline.closing+buckets.online.closing),_c:'tot'}
+  ];
+  h+=tbl(bHd,bRows)+'</div>';
+
+  // P&L impact
+  h+='<div class="cd red-l"><h3>Impact on P&L — Inventory Model vs Current Simple Model</h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">The current P&L applies a static <em>deval %</em> from Cost Sheet. The inventory model replaces this with cohort-based devaluation and surfaces RTV costs that aren\'t in the current model.</p>';
+  var invCogs=zeros(), invOpex=zeros();
+  var totSales2=zeros(), totDeval2=zeros(), totDuty2=zeros();
+  CK.forEach(function(k){
+    if(!invResults[k])return;
+    var ann=invResults[k].annual;
+    for(var y=0;y<10;y++){
+      invCogs[y]+=ann.sales[y]+ann.deval[y]+ann.rtvDutyLoss[y];
+      invOpex[y]+=ann.rtvFreight[y];
+      totSales2[y]+=ann.sales[y]; totDeval2[y]+=ann.deval[y]; totDuty2[y]+=ann.rtvDutyLoss[y];
+    }
+  });
+  var curCogs=c.T.cg;
+  var cogsDelta=invCogs.map(function(v,i){return v-curCogs[i];});
+  var dRows=[
+    rw('Current Model COGS',curCogs),
+    rw('Inventory Model COGS',invCogs,'sub'),
+    rw('  └ Sales @ cost',totSales2,'dim'),
+    rw('  └ Devaluation',totDeval2,'dim'),
+    rw('  └ RTV duty loss',totDuty2,'dim'),
+    rw('COGS Delta (new − current)',cogsDelta,'tot'),
+    rw('RTV Freight — new opex line',invOpex,'tot')
+  ];
+  h+=tbl(HD,dRows)+'</div>';
+
+  return h;
+}
+
+// ── TAB: Inventory Movement ──
+function renderInvMovementTab(c,invResults,active,inv){
+  var ir=invResults[active];
+  var h='';
+
+  // Build season labels
+  var sLabels=[];
+  for(var y=0;y<10;y++) for(var s=0;s<inv.seasonsPerYear;s++){
+    sLabels.push('Y'+(y+1)+(inv.seasonsPerYear===2?(s===0?'SS':'AW'):'Q'+(s+1)));
+  }
+
+  // ── COHORT SELL-THROUGH GRID ──
+  h+='<div class="cd accent"><h3>'+CI[active]+' '+CN[active]+' — Cohort Sell-through Grid</h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">Each row is a buy cohort (by birth season). Cells show <strong>sales from that cohort in each calendar season</strong>. Cohort is active for '+inv.seasonLife+' seasons. Scroll horizontally — the cohort column stays frozen.</p>';
+
+  var activeCohorts=ir.cohorts.filter(function(cg){return cg.buyValue>0.0001;});
+  if(!activeCohorts.length){
+    h+='<p style="color:var(--t3);text-align:center;padding:16px">No cohorts with buys. Add revenue in this channel.</p></div>';
+  } else {
+    var cHd=['Cohort (Birth)','Buy','RTV Ret'].concat(sLabels).concat(['Sold Σ','Deval','Leftover']);
+    var cRows=activeCohorts.map(function(cg){
+      var r={};
+      r['Cohort (Birth)']=sLabels[cg.birthSeason];
+      r['Buy']=fCr(cg.buyValue);
+      r['RTV Ret']=cg.rtvReturn>0.0001?fCr(cg.rtvReturn):'';
+      var totalSold=0;
+      sLabels.forEach(function(sl,t){
+        var amt=cg.salesBySeason[t]||0;
+        totalSold+=amt;
+        r[sl]=amt>0.0001?fCr(amt):'';
+      });
+      r['Sold Σ']=fCr(totalSold);
+      r['Deval']=cg.deval>0.0001?fCr(cg.deval):'';
+      var leftover=cg.buyValue-totalSold-(cg.rtvReturn||0)-(cg.deval||0);
+      r['Leftover']=Math.abs(leftover)>0.0001?fCr(leftover):'';
+      return r;
+    });
+    // Totals row
+    var totRow={'Cohort (Birth)':'TOTAL',_c:'tot'};
+    totRow['Buy']=fCr(activeCohorts.reduce(function(s,cg){return s+cg.buyValue;},0));
+    totRow['RTV Ret']=fCr(activeCohorts.reduce(function(s,cg){return s+(cg.rtvReturn||0);},0));
+    sLabels.forEach(function(sl,t){
+      var colSum=activeCohorts.reduce(function(s,cg){return s+(cg.salesBySeason[t]||0);},0);
+      totRow[sl]=colSum>0.0001?fCr(colSum):'';
+    });
+    totRow['Sold Σ']=fCr(activeCohorts.reduce(function(s,cg){
+      var c_total=0;
+      sLabels.forEach(function(_,t){c_total+=(cg.salesBySeason[t]||0);});
+      return s+c_total;
+    },0));
+    totRow['Deval']=fCr(activeCohorts.reduce(function(s,cg){return s+(cg.deval||0);},0));
+    var totLeft=activeCohorts.reduce(function(s,cg){
+      var sld=0; sLabels.forEach(function(_,t){sld+=(cg.salesBySeason[t]||0);});
+      return s+(cg.buyValue-sld-(cg.rtvReturn||0)-(cg.deval||0));
+    },0);
+    totRow['Leftover']=fCr(totLeft);
+    cRows.push(totRow);
+    h+=tbl(cHd,cRows)+'</div>';
+  }
+
+  // ── SEASON-LEVEL FLOW ──
+  h+='<div class="cd"><h3>Season-Level Inventory Flow</h3>';
+  h+='<p style="font-size:11.5px;color:var(--t3);margin-bottom:10px">Buys = Cohort Buys (for sell-through) + Floor Buys (safety-stock top-up). Closing = Working Inventory + Floor Stock. First column is frozen — scroll horizontally to see all seasons.</p>';
+  var mHd=['Metric'].concat(sLabels);
+  var mRows=[
+    {Metric:'Demand (cost)',_c:'dim'},
+    {Metric:'Opening Inventory (Total)'},
+    {Metric:'  └ Working Opening',_c:'dim'},
+    {Metric:'  └ Floor Opening',_c:'dim'},
+    {Metric:'(+) Cohort Buys',_c:'sub'},
+    {Metric:'(+) Floor Buy (safety top-up)',_c:'sub'},
+    {Metric:'(+) Total Buys',_c:'tot'},
+    {Metric:'(−) Sales @ Cost'},
+    {Metric:'(−) RTV Returned',_c:'dim'},
+    {Metric:'RTV Freight (opex)',_c:'dim'},
+    {Metric:'RTV Duty Loss',_c:'dim'},
+    {Metric:'(−) Devaluation',_c:'dim'},
+    {Metric:'Working Closing',_c:'dim'},
+    {Metric:'Floor Stock (Min+Safety)',_c:'dim'},
+    {Metric:'Closing Inventory (Total)',_c:'tot'}
+  ];
+  ir.flow.forEach(function(f,t){
+    var lbl=sLabels[t];
+    mRows[0][lbl]=fCr(f.demand);
+    mRows[1][lbl]=fCr(f.opening);
+    mRows[2][lbl]=fCr(f.workingOpening);
+    mRows[3][lbl]=fCr(f.floorOpening);
+    mRows[4][lbl]=fCr(f.cohortBuys);
+    mRows[5][lbl]=fCr(f.floorBuy);
+    mRows[6][lbl]=fCr(f.buys);
+    mRows[7][lbl]=fCr(f.sales);
+    mRows[8][lbl]=fCr(f.rtvReturn);
+    mRows[9][lbl]=fCr(f.rtvFreight);
+    mRows[10][lbl]=fCr(f.rtvDutyLoss);
+    mRows[11][lbl]=fCr(f.deval);
+    mRows[12][lbl]=fCr(f.workingClosing);
+    mRows[13][lbl]=fCr(f.floorStock);
+    mRows[14][lbl]=fCr(f.closing);
+  });
+  h+=tbl(mHd,mRows)+'</div>';
+
+  // ── ANNUAL ROLLUP ──
+  h+='<div class="cd green-l"><h3>Annual Rollup</h3>';
+  var aHd=['Metric'].concat(YR).concat(['10-Yr Total']);
+  var aRows=[
+    rw2('Cohort Buys',ir.annual.cohortBuys,'sub'),
+    rw2('Floor Buy (safety top-up)',ir.annual.floorBuy,'sub'),
+    rw2('Total Buys',ir.annual.buys,'tot'),
+    rw2('Sales @ Cost',ir.annual.sales),
+    rw2('RTV Returned',ir.annual.rtvReturn,'dim'),
+    rw2('RTV Freight (opex)',ir.annual.rtvFreight,'dim'),
+    rw2('RTV Duty Loss',ir.annual.rtvDutyLoss,'dim'),
+    rw2('Devaluation',ir.annual.deval,'dim'),
+    {Metric:'Working Closing (Yr-end)',_c:'dim'},
+    {Metric:'Floor Stock (Yr-end)',_c:'dim'},
+    {Metric:'Closing Inventory (Total, Yr-end)',_c:'tot'}
+  ];
+  YR.forEach(function(y,i){
+    aRows[8][y]=fCr(ir.annual.workingClosing[i]);
+    aRows[9][y]=fCr(ir.annual.floorStock[i]);
+    aRows[10][y]=fCr(ir.annual.closing[i]);
+  });
+  aRows[8].Total='—'; aRows[9].Total='—'; aRows[10].Total='—';
+  h+=tbl(aHd,aRows)+'</div>';
+
+  return h;
+}
+
+
+function loadJS(u){return new Promise(function(r,j){
+  if(document.querySelector('script[src="'+u+'"]')){r();return;}
+  var s=document.createElement('script');s.src=u;s.onload=r;s.onerror=j;document.head.appendChild(s);
+});}
+
+
+function xExcel(){
+  var b=document.getElementById('bx'); b.textContent='⏳';
+  loadJS('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js').then(function(){
+    var c=calc(), T=c.T, CF=c.CF, R=c.R; var wb=XLSX.utils.book_new();
+    // Summary sheet
+    var sum=[['BizPlan Pro — '+S.name],['Generated: '+new Date().toLocaleDateString('en-IN')],['IRR: '+fp(c.irr),'NPV: '+fCr(c.npv),'WACC: '+fp(S.wacc[0]||.12)],[]];
+    sum.push(['Metric'].concat(YR).concat(['10-Yr Total']));
+    [['Gross Revenue',T.rv],['NSV',T.nv],['Gross Margin',T.gm],['EBITDA',T.eb],['EBIT',T.ebit],['PAT',T.pat],['Capex',T.cx],['Net Cash Flow',CF.ncf],['Cumulative CF',CF.cum]]
+      .forEach(function(r2){sum.push([r2[0]].concat(r2[1].map(function(v){return+v.toFixed(4);})).concat([+sm(r2[1]).toFixed(4)]));});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'Summary');
+    // P&L
+    var pl=[['Particulars'].concat(YR).concat(['10-Yr Total'])];
+    [['Gross Revenue',T.rv],['NSV',T.nv],['COGS',T.cg],['Gross Margin',T.gm],
+     ['Rent',T.rn],['Staff',T.sf],['Utilities',T.ut],['Other Opex',T.ox],['Marketing',T.mk],['Corp OH',T.co],
+     ['EBITDA',T.eb],['Depreciation',T.dep],['EBIT',T.ebit],['Tax',T.tax],['PAT',T.pat]]
+      .forEach(function(r2){pl.push([r2[0]].concat(r2[1].map(function(v){return+v.toFixed(4);})).concat([+sm(r2[1]).toFixed(4)]));});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(pl),'P&L');
+    // Cash Flow
+    var cf=[['Metric'].concat(YR)];
+    [['PAT',CF.pat],['Depreciation',CF.dep],['WC Change',CF.wc],['Op CF',CF.ocf],['Inv CF',CF.icf],['Net CF',CF.ncf],['Cumulative CF',CF.cum]]
+      .forEach(function(r2){cf.push([r2[0]].concat(r2[1].map(function(v){return+v.toFixed(4);})));});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(cf),'Cash Flow');
+    // Channel sheets
+    CK.forEach(function(k){
+      var d=[['Store','Metric'].concat(YR)];
+      R[k].stores.forEach(function(sc){
+        [['NSV',sc.s.nv],['Gross Margin',sc.s.gm],['Rent',sc.s.rn],['Staff',sc.s.sf],['EBITDA',sc.s.eb],['EBIT',sc.s.ebit],['Capex',sc.s.cx]]
+          .forEach(function(m){d.push([sc.name,m[0]].concat(m[1].map(function(v){return+v.toFixed(4);})));});
+        d.push([]);
+      });
+      var sheetName=CN[k].replace(/[^\w]/g,'').slice(0,28);
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(d),sheetName);
+    });
+    XLSX.writeFile(wb,'BizPlan_'+S.name.replace(/[^\w]/g,'_')+'.xlsx');
+    b.textContent='⬇ Excel'; toast('Excel exported','success');
+  }).catch(function(e){toast('Excel export failed: '+e.message,'error');b.textContent='⬇ Excel';});
+}
+
+function xPDF(){
+  var b=document.getElementById('bp'); b.textContent='⏳';
+  loadJS('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+    .then(function(){return loadJS('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');})
+    .then(function(){
+    var c=calc(), T=c.T, CF=c.CF;
+    var doc=new jspdf.jsPDF('l','mm','a4'), pw=doc.internal.pageSize.getWidth(), ph=doc.internal.pageSize.getHeight();
+    var ok=c.irr>=(S.wacc[0]||.12);
+
+    // Header
+    doc.setFillColor(42,90,60); doc.rect(0,0,pw,18,'F');
+    doc.setTextColor(255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+    doc.text('BizPlan Pro — '+S.name,14,12);
+    doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.text('₹ Crores | 10-Year Plan | '+new Date().toLocaleDateString('en-IN'),pw-14,12,{align:'right'});
+
+    // Decision banner
+    var bc=ok?[26,122,66]:[166,38,38];
+    doc.setFillColor(bc[0],bc[1],bc[2]); doc.roundedRect(14,22,pw-28,10,2,2,'F');
+    doc.setTextColor(255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text((ok?'✓ RECOMMENDED — GO':'✗ NOT RECOMMENDED — NO GO')+' | IRR: '+fp(c.irr)+' vs WACC: '+fp(S.wacc[0]||.12),pw/2,28.5,{align:'center'});
+    doc.setTextColor(0);
+
+    // KPI boxes
+    var kpis=[['IRR',fp(c.irr)],['NPV',fCr(c.npv)],['NSV Yr10',fCr(T.nv[9])],['EBITDA% Yr10',T.nv[9]?fp(T.eb[9]/T.nv[9]):'—'],['PAT 10yr',fCr(sm(T.pat))],['Capex Total',fCr(sm(T.cx))]];
+    var kw=(pw-28)/kpis.length, ky=36;
+    kpis.forEach(function(kp,i){
+      doc.setFillColor(247,245,242); doc.roundedRect(14+i*kw,ky,kw-2,14,2,2,'F');
+      doc.setFontSize(7); doc.setTextColor(122,117,109); doc.setFont('helvetica','normal');
+      doc.text(kp[0],14+i*kw+kw/2,ky+5,{align:'center'});
+      doc.setFontSize(10); doc.setTextColor(28,26,22); doc.setFont('helvetica','bold');
+      doc.text(kp[1],14+i*kw+kw/2,ky+11,{align:'center'});
+    });
+
+    // P&L table
+    var startY=54;
+    var cols=['Metric'].concat(YR).concat(['10-Yr Total']);
+    var body=[
+      ['NSV'].concat(T.nv.map(function(v){return fCr(v);})).concat([fCr(sm(T.nv))]),
+      ['Gross Margin'].concat(T.gm.map(function(v){return fCr(v);})).concat([fCr(sm(T.gm))]),
+      ['GM %'].concat(T.nv.map(function(v,i){return T.nv[i]?fp(T.gm[i]/T.nv[i]):'—';})).concat(['']),
+      ['EBITDA'].concat(T.eb.map(function(v){return fCr(v);})).concat([fCr(sm(T.eb))]),
+      ['EBITDA %'].concat(T.nv.map(function(v,i){return T.nv[i]?fp(T.eb[i]/T.nv[i]):'—';})).concat(['']),
+      ['PAT'].concat(T.pat.map(function(v){return fCr(v);})).concat([fCr(sm(T.pat))]),
+      ['Net Cash Flow'].concat(CF.ncf.map(function(v){return fCr(v);})).concat(['']),
+      ['Cumulative CF'].concat(CF.cum.map(function(v){return fCr(v);})).concat([''])
+    ];
+    doc.autoTable({head:[cols],body:body,startY:startY,theme:'grid',
+      headStyles:{fillColor:[42,90,60],fontSize:7,fontStyle:'bold'},
+      bodyStyles:{fontSize:7.5},columnStyles:{0:{cellWidth:28,fontStyle:'bold'}},
+      alternateRowStyles:{fillColor:[247,245,242]},margin:{left:14,right:14}});
+
+    doc.save('BizPlan_'+S.name.replace(/[^\w]/g,'_')+'.pdf');
+    b.textContent='⬇ PDF'; toast('PDF exported','success');
+  }).catch(function(e){toast('PDF export failed: '+e.message,'error');b.textContent='⬇ PDF';});
+}
+
+// ════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════
+initMSAL(); // pre-warm MSAL so first Save is instant
+draw();
+</script></body></html>
